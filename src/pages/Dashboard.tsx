@@ -21,6 +21,7 @@ import {
   BarChart3,
   Dumbbell,
   Bell,
+  MessageSquare,
 } from "lucide-react";
 import { Link } from "react-router-dom";
 

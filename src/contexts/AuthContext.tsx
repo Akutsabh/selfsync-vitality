@@ -1,6 +1,6 @@
-
-import React, { createContext, useContext, useState, useEffect } from "react";
-import { toast } from "@/components/ui/sonner";
+import React, { createContext, useState, useContext, useEffect } from "react";
+import { useNavigate } from "react-router-dom";
+import { toast } from "sonner";
 
 interface User {
   id: string;
@@ -33,8 +33,8 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
   const [user, setUser] = useState<User | null>(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
+  const navigate = useNavigate();
 
-  // Load user from local storage on init
   useEffect(() => {
     const storedUser = localStorage.getItem("selfsync_user");
     if (storedUser) {
@@ -53,10 +53,8 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
     setError(null);
     
     try {
-      // Simulate API call with timeout
       await new Promise((resolve) => setTimeout(resolve, 1000));
       
-      // Demo login logic - in a real app, this would be an API call
       if (email === "demo@example.com" && password === "password") {
         const newUser = {
           id: "user1",
@@ -68,8 +66,8 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
         setUser(newUser);
         localStorage.setItem("selfsync_user", JSON.stringify(newUser));
         toast.success("Logged in successfully!");
+        navigate("/dashboard");
       } else {
-        // For demo purposes, also accept any email/password combo
         const newUser = {
           id: "user" + Math.random().toString(36).substr(2, 9),
           email: email,
@@ -79,6 +77,7 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
         setUser(newUser);
         localStorage.setItem("selfsync_user", JSON.stringify(newUser));
         toast.success("Logged in successfully!");
+        navigate("/dashboard");
       }
     } catch (err) {
       console.error("Login error:", err);
@@ -94,10 +93,8 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
     setError(null);
     
     try {
-      // Simulate API call
       await new Promise((resolve) => setTimeout(resolve, 1000));
       
-      // Demo registration logic
       const newUser = {
         id: "user" + Math.random().toString(36).substr(2, 9),
         email,
@@ -107,6 +104,7 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
       setUser(newUser);
       localStorage.setItem("selfsync_user", JSON.stringify(newUser));
       toast.success("Account created successfully!");
+      navigate("/dashboard");
     } catch (err) {
       console.error("Registration error:", err);
       setError("Failed to register. Please try again.");

@@ -5,7 +5,7 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/com
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Slider } from "@/components/ui/slider";
 import Layout from "@/components/Layout";
-import { toast } from "@/components/ui/sonner";
+import { toast } from "sonner";
 import {
   Play,
   Pause,
