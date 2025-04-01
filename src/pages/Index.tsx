@@ -7,6 +7,7 @@ import { MoodTracking } from "@/components/landing/MoodTracking";
 import { DailyHabits } from "@/components/landing/DailyHabits";
 import { DailyAffirmation } from "@/components/landing/DailyAffirmation";
 import { CallToAction } from "@/components/landing/CallToAction";
+import { HealthQuiz } from "@/components/landing/HealthQuiz";
 
 const Index = () => {
   const navigate = useNavigate();
@@ -34,6 +35,7 @@ const Index = () => {
           {/* Right column */}
           <div className="space-y-6">
             <DailyAffirmation />
+            <HealthQuiz />
             <MemoryGame />
           </div>
         </div>
