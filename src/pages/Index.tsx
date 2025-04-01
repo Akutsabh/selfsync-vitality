@@ -23,6 +23,7 @@ import {
 } from "lucide-react";
 import { ThemeToggle } from "@/components/ThemeToggle";
 import Logo from "@/components/Logo";
+import { MemoryGame } from "@/components/MemoryGame";
 
 const Index = () => {
   const navigate = useNavigate();
@@ -189,8 +190,8 @@ const Index = () => {
           </div>
           
           {/* Right column */}
-          <div>
-            <Card className="bg-black/30 border-none text-white h-80">
+          <div className="space-y-6">
+            <Card className="bg-black/30 border-none text-white">
               <CardHeader className="text-center">
                 <CardTitle className="text-xl">Daily Affirmation</CardTitle>
               </CardHeader>
@@ -204,6 +205,9 @@ const Index = () => {
                 </Button>
               </CardContent>
             </Card>
+            
+            {/* Memory Game */}
+            <MemoryGame />
           </div>
         </div>
         
