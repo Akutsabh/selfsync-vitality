@@ -1,3 +1,4 @@
+
 import { useState, useEffect } from "react";
 import { useSearchParams } from "react-router-dom";
 import { Button } from "@/components/ui/button";
@@ -24,6 +25,7 @@ import {
   Dumbbell,
   Bell,
   MessageSquare,
+  GamepadIcon,
 } from "lucide-react";
 import { Link } from "react-router-dom";
 
@@ -92,7 +94,7 @@ export default function Dashboard() {
   return (
     <Layout>
       <div className="container py-6 md:py-8">
-        <div className="flex flex-col gap-1 mb-8">
+        <div className="flex flex-col gap-1 mb-6">
           <h1 className="text-3xl font-bold tracking-tight">
             Welcome, {user?.name?.split(" ")[0] || "Friend"}
           </h1>
@@ -101,14 +103,17 @@ export default function Dashboard() {
           </p>
         </div>
         
-        {/* Health Quotes Carousel */}
-        <HealthQuotesCarousel />
+        {/* Health Quotes Carousel - Made smaller */}
+        <div className="mb-6">
+          <HealthQuotesCarousel />
+        </div>
         
         <Tabs defaultValue="dashboard" value={activeTab} onValueChange={handleTabChange}>
-          <TabsList className="mb-8">
+          <TabsList className="mb-6">
             <TabsTrigger value="dashboard">Dashboard</TabsTrigger>
             <TabsTrigger value="reminders">Reminders</TabsTrigger>
             <TabsTrigger value="rewards">Rewards</TabsTrigger>
+            <TabsTrigger value="games">Games</TabsTrigger>
           </TabsList>
           
           <TabsContent value="dashboard" className="space-y-6">
@@ -256,46 +261,85 @@ export default function Dashboard() {
             
             <div className="grid gap-4 grid-cols-2 md:grid-cols-4">
               <Link to="/mood-tracker" className="group">
-                <Card className="border-none shadow-sm h-full transition-all group-hover:shadow-md group-hover:-translate-y-1">
-                  <CardHeader>
+                <Card className="border-none shadow-sm h-full transition-all group-hover:shadow-md group-hover:-translate-y-1 overflow-hidden">
+                  <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-black/30 to-transparent z-10"></div>
+                  <img 
+                    src="https://images.unsplash.com/photo-1493612276216-ee3925520721?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80" 
+                    className="absolute inset-0 w-full h-full object-cover opacity-80 group-hover:scale-105 transition-transform duration-300"
+                    alt="Mood tracker"
+                  />
+                  <CardHeader className="relative z-20 text-white">
                     <CardTitle className="flex items-center gap-2">
-                      <Sparkles className="h-5 w-5 text-yellow-500" />
+                      <Sparkles className="h-5 w-5 text-yellow-300" />
                       Mood Tracker
                     </CardTitle>
-                    <CardDescription>Track and analyze your emotional well-being</CardDescription>
+                    <CardDescription className="text-white/80">Track and analyze your emotional well-being</CardDescription>
                   </CardHeader>
-                  <CardContent>
-                    <p className="text-muted-foreground">Log your mood to receive personalized insights and recommendations.</p>
+                  <CardContent className="relative z-20 text-white/90">
+                    <p>Log your mood to receive personalized insights and recommendations.</p>
                   </CardContent>
                 </Card>
               </Link>
               
               <Link to="/journal" className="group">
-                <Card className="border-none shadow-sm h-full transition-all group-hover:shadow-md group-hover:-translate-y-1">
-                  <CardHeader>
+                <Card className="border-none shadow-sm h-full transition-all group-hover:shadow-md group-hover:-translate-y-1 overflow-hidden">
+                  <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-black/30 to-transparent z-10"></div>
+                  <img 
+                    src="https://images.unsplash.com/photo-1455390582262-044cdead277a?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80" 
+                    className="absolute inset-0 w-full h-full object-cover opacity-80 group-hover:scale-105 transition-transform duration-300"
+                    alt="Journal"
+                  />
+                  <CardHeader className="relative z-20 text-white">
                     <CardTitle className="flex items-center gap-2">
-                      <BookOpen className="h-5 w-5 text-emerald-500" />
+                      <BookOpen className="h-5 w-5 text-emerald-300" />
                       Journal & Gratitude
                     </CardTitle>
-                    <CardDescription>Record your thoughts and practice gratitude</CardDescription>
+                    <CardDescription className="text-white/80">Record your thoughts and practice gratitude</CardDescription>
                   </CardHeader>
-                  <CardContent>
-                    <p className="text-muted-foreground">Enhance your well-being through regular journaling and gratitude exercises.</p>
+                  <CardContent className="relative z-20 text-white/90">
+                    <p>Enhance your well-being through regular journaling and gratitude exercises.</p>
                   </CardContent>
                 </Card>
               </Link>
               
               <Link to="/bmi-calculator" className="group">
-                <Card className="border-none shadow-sm h-full transition-all group-hover:shadow-md group-hover:-translate-y-1">
-                  <CardHeader>
+                <Card className="border-none shadow-sm h-full transition-all group-hover:shadow-md group-hover:-translate-y-1 overflow-hidden">
+                  <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-black/30 to-transparent z-10"></div>
+                  <img 
+                    src="https://images.unsplash.com/photo-1571019613454-1cb2f99b2d8b?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80" 
+                    className="absolute inset-0 w-full h-full object-cover opacity-80 group-hover:scale-105 transition-transform duration-300"
+                    alt="BMI Calculator"
+                  />
+                  <CardHeader className="relative z-20 text-white">
                     <CardTitle className="flex items-center gap-2">
-                      <HeartIcon className="h-5 w-5 text-red-500" />
+                      <HeartIcon className="h-5 w-5 text-red-400" />
                       BMI Calculator
                     </CardTitle>
-                    <CardDescription>Check your Body Mass Index and health</CardDescription>
+                    <CardDescription className="text-white/80">Check your Body Mass Index and health</CardDescription>
                   </CardHeader>
-                  <CardContent>
-                    <p className="text-muted-foreground">Calculate your BMI and get personalized health recommendations.</p>
+                  <CardContent className="relative z-20 text-white/90">
+                    <p>Calculate your BMI and get personalized health recommendations.</p>
+                  </CardContent>
+                </Card>
+              </Link>
+              
+              <Link to="/relaxation" className="group">
+                <Card className="border-none shadow-sm h-full transition-all group-hover:shadow-md group-hover:-translate-y-1 overflow-hidden">
+                  <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-black/30 to-transparent z-10"></div>
+                  <img 
+                    src="https://images.unsplash.com/photo-1470319149464-1a9ee7c5a9cb?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80" 
+                    className="absolute inset-0 w-full h-full object-cover opacity-80 group-hover:scale-105 transition-transform duration-300"
+                    alt="Relaxation"
+                  />
+                  <CardHeader className="relative z-20 text-white">
+                    <CardTitle className="flex items-center gap-2">
+                      <MoonIcon className="h-5 w-5 text-blue-300" />
+                      Relaxation
+                    </CardTitle>
+                    <CardDescription className="text-white/80">Find peace with guided meditation</CardDescription>
+                  </CardHeader>
+                  <CardContent className="relative z-20 text-white/90">
+                    <p>Explore meditation and breathing exercises to reduce stress and anxiety.</p>
                   </CardContent>
                 </Card>
               </Link>
@@ -303,31 +347,63 @@ export default function Dashboard() {
             
             <div className="grid gap-4 grid-cols-2 md:grid-cols-4">
               <Link to="/chat">
-                <Button variant="outline" className="w-full h-20 flex flex-col gap-1">
-                  <MessageSquare className="h-5 w-5" />
-                  <span>AI Chat</span>
-                </Button>
+                <Card className="relative overflow-hidden border-none p-0 h-24 flex flex-col justify-end group">
+                  <div className="absolute inset-0 bg-gradient-to-r from-primary to-primary/70 opacity-90 group-hover:opacity-100 transition-opacity"></div>
+                  <img 
+                    src="https://images.unsplash.com/photo-1531482615713-2afd69097998?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80" 
+                    alt="AI Chat" 
+                    className="absolute inset-0 w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
+                  />
+                  <div className="relative z-10 p-4 text-white flex items-center gap-3">
+                    <MessageSquare className="h-6 w-6" />
+                    <span className="font-medium">AI Chat</span>
+                  </div>
+                </Card>
               </Link>
               
-              <Link to="/relaxation">
-                <Button variant="outline" className="w-full h-20 flex flex-col gap-1">
-                  <BrainCircuitIcon className="h-5 w-5" />
-                  <span>Relaxation</span>
-                </Button>
+              <Link to="/dashboard?tab=games">
+                <Card className="relative overflow-hidden border-none p-0 h-24 flex flex-col justify-end group">
+                  <div className="absolute inset-0 bg-gradient-to-r from-amber-600 to-amber-500 opacity-90 group-hover:opacity-100 transition-opacity"></div>
+                  <img 
+                    src="https://images.unsplash.com/photo-1588642890204-6bf5d0eaf6e4?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80" 
+                    alt="Games & Activities" 
+                    className="absolute inset-0 w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
+                  />
+                  <div className="relative z-10 p-4 text-white flex items-center gap-3">
+                    <GamepadIcon className="h-6 w-6" />
+                    <span className="font-medium">Games & Activities</span>
+                  </div>
+                </Card>
               </Link>
               
               <Link to="/mood-tracker">
-                <Button variant="outline" className="w-full h-20 flex flex-col gap-1">
-                  <Sparkles className="h-5 w-5" />
-                  <span>Mood Log</span>
-                </Button>
+                <Card className="relative overflow-hidden border-none p-0 h-24 flex flex-col justify-end group">
+                  <div className="absolute inset-0 bg-gradient-to-r from-yellow-600 to-yellow-500 opacity-90 group-hover:opacity-100 transition-opacity"></div>
+                  <img 
+                    src="https://images.unsplash.com/photo-1578496480157-697fc14d2e55?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80" 
+                    alt="Mood Log" 
+                    className="absolute inset-0 w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
+                  />
+                  <div className="relative z-10 p-4 text-white flex items-center gap-3">
+                    <Sparkles className="h-6 w-6" />
+                    <span className="font-medium">Mood Log</span>
+                  </div>
+                </Card>
               </Link>
               
               <Link to="/dashboard?tab=rewards">
-                <Button variant="outline" className="w-full h-20 flex flex-col gap-1">
-                  <Award className="h-5 w-5" />
-                  <span>Rewards</span>
-                </Button>
+                <Card className="relative overflow-hidden border-none p-0 h-24 flex flex-col justify-end group">
+                  <div className="absolute inset-0 bg-gradient-to-r from-purple-600 to-purple-500 opacity-90 group-hover:opacity-100 transition-opacity"></div>
+                  <img 
+                    src="https://images.unsplash.com/photo-1589829085413-56de8ae18c73?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80" 
+                    alt="Rewards" 
+                    className="absolute inset-0 w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
+                  />
+                  <div className="relative z-10 p-4 text-white flex items-center gap-3">
+                    <Award className="h-6 w-6" />
+                    <span className="font-medium">Rewards</span>
+                  </div>
+                </Card>
               </Link>
             </div>
           </TabsContent>
@@ -452,17 +528,36 @@ export default function Dashboard() {
                 </div>
               </CardContent>
             </Card>
-            
+          </TabsContent>
+          
+          {/* New Games Tab */}
+          <TabsContent value="games" className="space-y-6">
             <div className="grid gap-6 md:grid-cols-2">
-              <div>
-                <h2 className="text-xl font-semibold mb-4">Wellness Activities</h2>
-                <WellnessMemoryGame />
-              </div>
+              <Card className="border-none shadow-sm">
+                <CardHeader>
+                  <CardTitle className="flex items-center gap-2">
+                    <BrainCircuitIcon className="h-5 w-5 text-purple-500" />
+                    Health Quiz
+                  </CardTitle>
+                  <CardDescription>Test your knowledge about health and wellness</CardDescription>
+                </CardHeader>
+                <CardContent>
+                  <HealthQuiz />
+                </CardContent>
+              </Card>
               
-              <div>
-                <h2 className="text-xl font-semibold mb-4">Health Quiz</h2>
-                <HealthQuiz />
-              </div>
+              <Card className="border-none shadow-sm">
+                <CardHeader>
+                  <CardTitle className="flex items-center gap-2">
+                    <GamepadIcon className="h-5 w-5 text-amber-500" />
+                    Wellness Memory Game
+                  </CardTitle>
+                  <CardDescription>Improve your memory while learning about wellness</CardDescription>
+                </CardHeader>
+                <CardContent>
+                  <WellnessMemoryGame />
+                </CardContent>
+              </Card>
             </div>
           </TabsContent>
         </Tabs>

@@ -1,4 +1,3 @@
-
 import { useEffect, useState } from "react";
 import { Link, useLocation } from "react-router-dom";
 import { Button } from "@/components/ui/button";
@@ -16,6 +15,7 @@ import {
   LogOut,
   Weight,
   Award,
+  GamepadIcon,
 } from "lucide-react";
 
 const sidebarItems = [
@@ -50,7 +50,12 @@ const sidebarItems = [
     icon: <Moon className="h-5 w-5" />,
   },
   {
-    title: "Activity & Rewards",
+    title: "Games & Activities",
+    href: "/dashboard?tab=games",
+    icon: <GamepadIcon className="h-5 w-5" />,
+  },
+  {
+    title: "Rewards",
     href: "/dashboard?tab=rewards",
     icon: <Award className="h-5 w-5" />,
   },
@@ -61,13 +66,11 @@ export function Sidebar() {
   const location = useLocation();
   const [isMobile, setIsMobile] = useState(false);
 
-  // Check if the current route is active
   const isActive = (href: string) => {
     return location.pathname === href || 
            (location.pathname === "/dashboard" && href.includes("?tab=") && location.search.includes(href.split("?")[1]));
   };
 
-  // Handle mobile detection
   useEffect(() => {
     const checkMobile = () => {
       setIsMobile(window.innerWidth < 768);
