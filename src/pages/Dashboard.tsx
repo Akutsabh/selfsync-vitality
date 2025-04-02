@@ -1,3 +1,4 @@
+
 import { useState, useEffect } from "react";
 import { useSearchParams } from "react-router-dom";
 import { Button } from "@/components/ui/button";
@@ -7,6 +8,7 @@ import { Progress } from "@/components/ui/progress";
 import Layout from "@/components/Layout";
 import { useAuth } from "@/contexts/AuthContext";
 import { HealthQuiz } from "@/components/landing/HealthQuiz";
+import { HealthQuotesCarousel } from "@/components/dashboard/HealthQuotesCarousel";
 import {
   DropletIcon,
   MoonIcon,
@@ -98,6 +100,9 @@ export default function Dashboard() {
             Here's an overview of your wellness journey
           </p>
         </div>
+        
+        {/* Health Quotes Carousel */}
+        <HealthQuotesCarousel />
         
         <Tabs defaultValue="dashboard" value={activeTab} onValueChange={handleTabChange}>
           <TabsList className="mb-8">
