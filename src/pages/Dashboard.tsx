@@ -1,4 +1,3 @@
-
 import { useState, useEffect } from "react";
 import { useSearchParams } from "react-router-dom";
 import { Button } from "@/components/ui/button";
@@ -7,6 +6,7 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/com
 import { Progress } from "@/components/ui/progress";
 import Layout from "@/components/Layout";
 import { useAuth } from "@/contexts/AuthContext";
+import { HealthQuiz } from "@/components/landing/HealthQuiz";
 import {
   DropletIcon,
   MoonIcon,
@@ -45,7 +45,6 @@ export default function Dashboard() {
   const [activeTab, setActiveTab] = useState("dashboard");
   const [wellnessScore, setWellnessScore] = useState(0);
   
-  // Get active tab from URL if present
   useEffect(() => {
     const tab = searchParams.get("tab");
     if (tab) {
@@ -53,13 +52,11 @@ export default function Dashboard() {
     }
   }, [searchParams]);
   
-  // Handle tab change
   const handleTabChange = (value: string) => {
     setActiveTab(value);
     setSearchParams({ tab: value });
   };
   
-  // Simulate loading wellness score
   useEffect(() => {
     const timer = setTimeout(() => {
       setWellnessScore(78);
@@ -68,7 +65,6 @@ export default function Dashboard() {
     return () => clearTimeout(timer);
   }, []);
   
-  // Mock data for today's reminders
   const todayReminders: Reminder[] = [
     { id: "1", title: "Drink water", time: "Every 2 hours", icon: <DropletIcon />, completed: true },
     { id: "2", title: "Meditation", time: "9:00 AM", icon: <BrainCircuitIcon />, completed: true },
@@ -77,7 +73,6 @@ export default function Dashboard() {
     { id: "5", title: "Sleep routine", time: "10:00 PM", icon: <MoonIcon />, completed: false },
   ];
   
-  // Mock data for streaks
   const streaks: Streak[] = [
     { activity: "Meditation", days: 12, icon: <BrainCircuitIcon className="h-5 w-5 text-purple-500" /> },
     { activity: "Hydration", days: 21, icon: <DropletIcon className="h-5 w-5 text-blue-500" /> },
@@ -85,7 +80,6 @@ export default function Dashboard() {
     { activity: "Exercise", days: 5, icon: <Dumbbell className="h-5 w-5 text-green-500" /> },
   ];
   
-  // Mock data for badges/awards
   const badges = [
     { id: 1, name: "Early Bird", description: "Completed morning routine 7 days in a row", icon: <Sparkles className="h-8 w-8 text-amber-500" /> },
     { id: 2, name: "Hydration Hero", description: "Met daily water intake goal for 2 weeks", icon: <DropletIcon className="h-8 w-8 text-blue-500" /> },
@@ -113,7 +107,6 @@ export default function Dashboard() {
           </TabsList>
           
           <TabsContent value="dashboard" className="space-y-6">
-            {/* Top Cards */}
             <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
               <Card className="border-none shadow-sm">
                 <CardHeader className="pb-2">
@@ -256,8 +249,7 @@ export default function Dashboard() {
               </Card>
             </div>
             
-            {/* Bottom Cards */}
-            <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
+            <div className="grid gap-4 grid-cols-2 md:grid-cols-4">
               <Link to="/mood-tracker" className="group">
                 <Card className="border-none shadow-sm h-full transition-all group-hover:shadow-md group-hover:-translate-y-1">
                   <CardHeader>
@@ -304,7 +296,6 @@ export default function Dashboard() {
               </Link>
             </div>
             
-            {/* Quick Access */}
             <div className="grid gap-4 grid-cols-2 md:grid-cols-4">
               <Link to="/chat">
                 <Button variant="outline" className="w-full h-20 flex flex-col gap-1">
@@ -456,6 +447,10 @@ export default function Dashboard() {
                 </div>
               </CardContent>
             </Card>
+            
+            <div className="mt-6">
+              <HealthQuiz />
+            </div>
           </TabsContent>
         </Tabs>
       </div>
