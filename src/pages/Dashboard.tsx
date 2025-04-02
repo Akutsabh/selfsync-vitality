@@ -1,4 +1,3 @@
-
 import { useState, useEffect } from "react";
 import { useSearchParams } from "react-router-dom";
 import { Button } from "@/components/ui/button";
@@ -9,6 +8,7 @@ import Layout from "@/components/Layout";
 import { useAuth } from "@/contexts/AuthContext";
 import { HealthQuiz } from "@/components/landing/HealthQuiz";
 import { HealthQuotesCarousel } from "@/components/dashboard/HealthQuotesCarousel";
+import { WellnessMemoryGame } from "@/components/games/WellnessMemoryGame";
 import {
   DropletIcon,
   MoonIcon,
@@ -453,8 +453,16 @@ export default function Dashboard() {
               </CardContent>
             </Card>
             
-            <div className="mt-6">
-              <HealthQuiz />
+            <div className="grid gap-6 md:grid-cols-2">
+              <div>
+                <h2 className="text-xl font-semibold mb-4">Wellness Activities</h2>
+                <WellnessMemoryGame />
+              </div>
+              
+              <div>
+                <h2 className="text-xl font-semibold mb-4">Health Quiz</h2>
+                <HealthQuiz />
+              </div>
             </div>
           </TabsContent>
         </Tabs>
