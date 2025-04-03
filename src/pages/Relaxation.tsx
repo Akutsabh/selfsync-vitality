@@ -1,5 +1,5 @@
 
-import { useState, useRef } from "react";
+import { useState, useRef, useEffect } from "react";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
@@ -18,7 +18,6 @@ import {
   Coffee,
   Flame,
   Moon,
-  LucideIcon,
   Timer,
   AlertTriangle,
   VolumeX,
@@ -40,6 +39,70 @@ interface BreathingExercise {
   benefits: string[];
 }
 
+// Class to manage audio players
+class AudioManager {
+  private audioElements: Map<string, HTMLAudioElement> = new Map();
+  
+  // Load an audio element
+  load(id: string, src: string): void {
+    if (!this.audioElements.has(id)) {
+      const audio = new Audio(src);
+      audio.loop = true;
+      this.audioElements.set(id, audio);
+    }
+  }
+  
+  // Play audio
+  play(id: string): void {
+    const audio = this.audioElements.get(id);
+    if (audio) {
+      audio.play().catch(err => {
+        console.error("Failed to play audio:", err);
+        toast.error("Failed to play audio. Try clicking again.");
+      });
+    }
+  }
+  
+  // Pause audio
+  pause(id: string): void {
+    const audio = this.audioElements.get(id);
+    if (audio) {
+      audio.pause();
+    }
+  }
+  
+  // Set volume
+  setVolume(id: string, volume: number): void {
+    const audio = this.audioElements.get(id);
+    if (audio) {
+      audio.volume = volume / 100;
+    }
+  }
+  
+  // Pause all audio
+  pauseAll(): void {
+    this.audioElements.forEach(audio => {
+      audio.pause();
+    });
+  }
+  
+  // Set volume for all
+  setVolumeAll(volume: number): void {
+    this.audioElements.forEach(audio => {
+      audio.volume = volume / 100;
+    });
+  }
+  
+  // Clean up
+  cleanup(): void {
+    this.audioElements.forEach(audio => {
+      audio.pause();
+      audio.src = "";
+    });
+    this.audioElements.clear();
+  }
+}
+
 export default function Relaxation() {
   const [activeTab, setActiveTab] = useState("sounds");
   const [isPlaying, setIsPlaying] = useState(false);
@@ -50,21 +113,54 @@ export default function Relaxation() {
   const [breathingSeconds, setBreathingSeconds] = useState(0);
   
   const timerRef = useRef<NodeJS.Timeout | null>(null);
+  const audioManagerRef = useRef<AudioManager>(new AudioManager());
   
   const sounds: Sound[] = [
-    { id: "rain", name: "Rain", icon: <Cloud />, category: "nature", audioSrc: "/sounds/rain.mp3" },
-    { id: "thunder", name: "Thunder Storm", icon: <Cloud />, category: "nature", audioSrc: "/sounds/thunder.mp3" },
-    { id: "forest", name: "Forest", icon: <Leaf />, category: "nature", audioSrc: "/sounds/forest.mp3" },
-    { id: "waves", name: "Ocean Waves", icon: <Waves />, category: "nature", audioSrc: "/sounds/waves.mp3" },
-    { id: "wind", name: "Wind", icon: <Wind />, category: "nature", audioSrc: "/sounds/wind.mp3" },
-    { id: "fire", name: "Fireplace", icon: <Flame />, category: "ambient", audioSrc: "/sounds/fire.mp3" },
-    { id: "cafe", name: "Cafe", icon: <Coffee />, category: "ambient", audioSrc: "/sounds/cafe.mp3" },
-    { id: "white", name: "White Noise", icon: <VolumeX />, category: "white", audioSrc: "/sounds/white.mp3" },
-    { id: "pink", name: "Pink Noise", icon: <VolumeX />, category: "white", audioSrc: "/sounds/pink.mp3" },
-    { id: "brown", name: "Brown Noise", icon: <VolumeX />, category: "white", audioSrc: "/sounds/brown.mp3" },
-    { id: "sleep", name: "Sleep Music", icon: <Moon />, category: "sleep", audioSrc: "/sounds/sleep.mp3" },
-    { id: "lullaby", name: "Lullaby", icon: <Music />, category: "sleep", audioSrc: "/sounds/lullaby.mp3" },
+    { id: "rain", name: "Rain", icon: <Cloud />, category: "nature", audioSrc: "https://relaxing-sounds.s3.amazonaws.com/nature/rain.mp3" },
+    { id: "thunder", name: "Thunder Storm", icon: <Cloud />, category: "nature", audioSrc: "https://relaxing-sounds.s3.amazonaws.com/nature/thunder.mp3" },
+    { id: "forest", name: "Forest", icon: <Leaf />, category: "nature", audioSrc: "https://relaxing-sounds.s3.amazonaws.com/nature/forest.mp3" },
+    { id: "waves", name: "Ocean Waves", icon: <Waves />, category: "nature", audioSrc: "https://relaxing-sounds.s3.amazonaws.com/nature/waves.mp3" },
+    { id: "wind", name: "Wind", icon: <Wind />, category: "nature", audioSrc: "https://relaxing-sounds.s3.amazonaws.com/nature/wind.mp3" },
+    { id: "fire", name: "Fireplace", icon: <Flame />, category: "ambient", audioSrc: "https://relaxing-sounds.s3.amazonaws.com/ambient/fire.mp3" },
+    { id: "cafe", name: "Cafe", icon: <Coffee />, category: "ambient", audioSrc: "https://relaxing-sounds.s3.amazonaws.com/ambient/cafe.mp3" },
+    { id: "white", name: "White Noise", icon: <VolumeX />, category: "white", audioSrc: "https://relaxing-sounds.s3.amazonaws.com/noise/white.mp3" },
+    { id: "pink", name: "Pink Noise", icon: <VolumeX />, category: "white", audioSrc: "https://relaxing-sounds.s3.amazonaws.com/noise/pink.mp3" },
+    { id: "brown", name: "Brown Noise", icon: <VolumeX />, category: "white", audioSrc: "https://relaxing-sounds.s3.amazonaws.com/noise/brown.mp3" },
+    { id: "sleep", name: "Sleep Music", icon: <Moon />, category: "sleep", audioSrc: "https://relaxing-sounds.s3.amazonaws.com/sleep/sleep.mp3" },
+    { id: "lullaby", name: "Lullaby", icon: <Music />, category: "sleep", audioSrc: "https://relaxing-sounds.s3.amazonaws.com/sleep/lullaby.mp3" },
   ];
+  
+  // Load audio on mount
+  useEffect(() => {
+    sounds.forEach(sound => {
+      audioManagerRef.current.load(sound.id, sound.audioSrc);
+    });
+    
+    // Clean up audio on unmount
+    return () => {
+      audioManagerRef.current.cleanup();
+      if (timerRef.current) {
+        clearInterval(timerRef.current);
+      }
+    };
+  }, []);
+  
+  // Handle audio play/pause based on state
+  useEffect(() => {
+    if (isPlaying) {
+      activeSoundIds.forEach(id => {
+        audioManagerRef.current.play(id);
+        audioManagerRef.current.setVolume(id, volume);
+      });
+    } else {
+      audioManagerRef.current.pauseAll();
+    }
+  }, [isPlaying, activeSoundIds]);
+  
+  // Handle volume change
+  useEffect(() => {
+    audioManagerRef.current.setVolumeAll(volume);
+  }, [volume]);
   
   const breathingExercises: BreathingExercise[] = [
     {
@@ -124,29 +220,35 @@ export default function Relaxation() {
   const handleSoundToggle = (soundId: string) => {
     if (activeSoundIds.includes(soundId)) {
       setActiveSoundIds(activeSoundIds.filter(id => id !== soundId));
+      audioManagerRef.current.pause(soundId);
     } else {
       // Limit to 3 active sounds
       if (activeSoundIds.length >= 3) {
         toast.warning("You can only mix up to 3 sounds at once");
         return;
       }
-      setActiveSoundIds([...activeSoundIds, soundId]);
+      
+      const newActiveSoundIds = [...activeSoundIds, soundId];
+      setActiveSoundIds(newActiveSoundIds);
+      
+      if (isPlaying) {
+        audioManagerRef.current.play(soundId);
+        audioManagerRef.current.setVolume(soundId, volume);
+      }
     }
   };
   
   const handlePlayPause = () => {
-    setIsPlaying(!isPlaying);
-    
     if (!isPlaying) {
       if (activeSoundIds.length === 0) {
         toast.warning("Please select at least one sound to play");
         return;
       }
       
-      // In a real app, this would play the actual sounds
+      setIsPlaying(true);
       toast.success(`Playing ${activeSoundIds.map(id => sounds.find(s => s.id === id)?.name).join(", ")}`);
     } else {
-      // In a real app, this would pause the actual sounds
+      setIsPlaying(false);
       toast.info("Paused playback");
     }
   };
@@ -186,6 +288,17 @@ export default function Relaxation() {
     setActiveExercise(null);
     setCurrentStep(0);
     setBreathingSeconds(0);
+  };
+  
+  // Handle timer set for sound playback
+  const handleSetTimer = (minutes: number) => {
+    toast.success(`Timer set for ${minutes} minutes`);
+    
+    setTimeout(() => {
+      setIsPlaying(false);
+      audioManagerRef.current.pauseAll();
+      toast.info("Timer completed - sound playback stopped");
+    }, minutes * 60 * 1000);
   };
   
   return (
