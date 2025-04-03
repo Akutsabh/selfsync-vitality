@@ -1,4 +1,3 @@
-
 import { useState, useEffect, useMemo } from "react";
 import { useSearchParams } from "react-router-dom";
 import { Button } from "@/components/ui/button";
@@ -237,166 +236,102 @@ export default function Dashboard() {
         </Card>
       </div>
       
-      {/* Main feature cards - using regular img with width/height to prevent CLS */}
+      {/* Feature cards without images */}
       <div className="grid gap-4 grid-cols-2 md:grid-cols-4">
         <Link to="/mood-tracker" className="group">
-          <Card className="border-none shadow-sm h-full transition-all group-hover:shadow-md group-hover:-translate-y-1 overflow-hidden">
-            <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-black/30 to-transparent z-10"></div>
-            <img 
-              src="https://images.unsplash.com/photo-1493612276216-ee3925520721?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80" 
-              className="absolute inset-0 w-full h-full object-cover opacity-80 group-hover:scale-105 transition-transform duration-300"
-              alt="Mood tracker"
-              width={400}
-              height={300}
-            />
-            <CardHeader className="relative z-20 text-white">
+          <Card className="border-none shadow-sm h-full transition-all group-hover:shadow-md group-hover:-translate-y-1">
+            <CardHeader>
               <CardTitle className="flex items-center gap-2">
-                <Sparkles className="h-5 w-5 text-yellow-300" />
+                <Sparkles className="h-5 w-5 text-yellow-400" />
                 Mood Tracker
               </CardTitle>
-              <CardDescription className="text-white/80">Track and analyze your emotional well-being</CardDescription>
+              <CardDescription>Track and analyze your emotional well-being</CardDescription>
             </CardHeader>
-            <CardContent className="relative z-20 text-white/90">
-              <p>Log your mood to receive personalized insights and recommendations.</p>
+            <CardContent>
+              <p className="text-sm">Log your mood to receive personalized insights.</p>
             </CardContent>
           </Card>
         </Link>
         
         <Link to="/journal" className="group">
-          <Card className="border-none shadow-sm h-full transition-all group-hover:shadow-md group-hover:-translate-y-1 overflow-hidden">
-            <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-black/30 to-transparent z-10"></div>
-            <img 
-              src="https://images.unsplash.com/photo-1455390582262-044cdead277a?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80" 
-              className="absolute inset-0 w-full h-full object-cover opacity-80 group-hover:scale-105 transition-transform duration-300"
-              alt="Journal"
-              width={400}
-              height={300}
-            />
-            <CardHeader className="relative z-20 text-white">
+          <Card className="border-none shadow-sm h-full transition-all group-hover:shadow-md group-hover:-translate-y-1">
+            <CardHeader>
               <CardTitle className="flex items-center gap-2">
-                <BookOpen className="h-5 w-5 text-emerald-300" />
+                <BookOpen className="h-5 w-5 text-emerald-500" />
                 Journal & Gratitude
               </CardTitle>
-              <CardDescription className="text-white/80">Record your thoughts and practice gratitude</CardDescription>
+              <CardDescription>Record your thoughts and practice gratitude</CardDescription>
             </CardHeader>
-            <CardContent className="relative z-20 text-white/90">
-              <p>Enhance your well-being through regular journaling and gratitude exercises.</p>
+            <CardContent>
+              <p className="text-sm">Enhance your well-being through journaling.</p>
             </CardContent>
           </Card>
         </Link>
         
         <Link to="/bmi-calculator" className="group">
-          <Card className="border-none shadow-sm h-full transition-all group-hover:shadow-md group-hover:-translate-y-1 overflow-hidden">
-            <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-black/30 to-transparent z-10"></div>
-            <img 
-              src="https://images.unsplash.com/photo-1571019613454-1cb2f99b2d8b?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80" 
-              className="absolute inset-0 w-full h-full object-cover opacity-80 group-hover:scale-105 transition-transform duration-300"
-              alt="BMI Calculator"
-              width={400}
-              height={300}
-            />
-            <CardHeader className="relative z-20 text-white">
+          <Card className="border-none shadow-sm h-full transition-all group-hover:shadow-md group-hover:-translate-y-1">
+            <CardHeader>
               <CardTitle className="flex items-center gap-2">
-                <HeartIcon className="h-5 w-5 text-red-400" />
+                <HeartIcon className="h-5 w-5 text-red-500" />
                 BMI Calculator
               </CardTitle>
-              <CardDescription className="text-white/80">Check your Body Mass Index and health</CardDescription>
+              <CardDescription>Check your Body Mass Index and health</CardDescription>
             </CardHeader>
-            <CardContent className="relative z-20 text-white/90">
-              <p>Calculate your BMI and get personalized health recommendations.</p>
+            <CardContent>
+              <p className="text-sm">Calculate your BMI and get recommendations.</p>
             </CardContent>
           </Card>
         </Link>
         
         <Link to="/relaxation" className="group">
-          <Card className="border-none shadow-sm h-full transition-all group-hover:shadow-md group-hover:-translate-y-1 overflow-hidden">
-            <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-black/30 to-transparent z-10"></div>
-            <img 
-              src="https://images.unsplash.com/photo-1470319149464-1a9ee7c5a9cb?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80" 
-              className="absolute inset-0 w-full h-full object-cover opacity-80 group-hover:scale-105 transition-transform duration-300"
-              alt="Relaxation"
-              width={400}
-              height={300}
-            />
-            <CardHeader className="relative z-20 text-white">
+          <Card className="border-none shadow-sm h-full transition-all group-hover:shadow-md group-hover:-translate-y-1">
+            <CardHeader>
               <CardTitle className="flex items-center gap-2">
-                <MoonIcon className="h-5 w-5 text-blue-300" />
+                <MoonIcon className="h-5 w-5 text-blue-500" />
                 Relaxation
               </CardTitle>
-              <CardDescription className="text-white/80">Find peace with guided meditation</CardDescription>
+              <CardDescription>Find peace with guided meditation</CardDescription>
             </CardHeader>
-            <CardContent className="relative z-20 text-white/90">
-              <p>Explore meditation and breathing exercises to reduce stress and anxiety.</p>
+            <CardContent>
+              <p className="text-sm">Explore meditation and breathing exercises.</p>
             </CardContent>
           </Card>
         </Link>
       </div>
       
-      {/* Quick access cards */}
+      {/* Quick access cards without images */}
       <div className="grid gap-4 grid-cols-2 md:grid-cols-4">
         <Link to="/chat">
-          <Card className="relative overflow-hidden border-none p-0 h-24 flex flex-col justify-end group">
-            <div className="absolute inset-0 bg-gradient-to-r from-primary to-primary/70 opacity-90 group-hover:opacity-100 transition-opacity"></div>
-            <img 
-              src="https://images.unsplash.com/photo-1531482615713-2afd69097998?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80" 
-              alt="AI Chat" 
-              className="absolute inset-0 w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
-              width={300}
-              height={100}
-            />
-            <div className="relative z-10 p-4 text-white flex items-center gap-3">
-              <MessageSquare className="h-6 w-6" />
+          <Card className="relative border-none p-4 h-20 flex items-center bg-primary/10 group hover:bg-primary/20 transition-colors">
+            <div className="flex items-center gap-3">
+              <MessageSquare className="h-6 w-6 text-primary" />
               <span className="font-medium">AI Chat</span>
             </div>
           </Card>
         </Link>
         
         <Link to="/dashboard?tab=games">
-          <Card className="relative overflow-hidden border-none p-0 h-24 flex flex-col justify-end group">
-            <div className="absolute inset-0 bg-gradient-to-r from-amber-600 to-amber-500 opacity-90 group-hover:opacity-100 transition-opacity"></div>
-            <img 
-              src="https://images.unsplash.com/photo-1588642890204-6bf5d0eaf6e4?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80" 
-              alt="Games & Activities" 
-              className="absolute inset-0 w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
-              width={300}
-              height={100}
-            />
-            <div className="relative z-10 p-4 text-white flex items-center gap-3">
-              <GamepadIcon className="h-6 w-6" />
+          <Card className="relative border-none p-4 h-20 flex items-center bg-amber-500/10 group hover:bg-amber-500/20 transition-colors">
+            <div className="flex items-center gap-3">
+              <GamepadIcon className="h-6 w-6 text-amber-500" />
               <span className="font-medium">Games</span>
             </div>
           </Card>
         </Link>
         
         <Link to="/mood-tracker">
-          <Card className="relative overflow-hidden border-none p-0 h-24 flex flex-col justify-end group">
-            <div className="absolute inset-0 bg-gradient-to-r from-yellow-600 to-yellow-500 opacity-90 group-hover:opacity-100 transition-opacity"></div>
-            <img 
-              src="https://images.unsplash.com/photo-1578496480157-697fc14d2e55?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80" 
-              alt="Mood Log" 
-              className="absolute inset-0 w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
-              width={300}
-              height={100}
-            />
-            <div className="relative z-10 p-4 text-white flex items-center gap-3">
-              <Sparkles className="h-6 w-6" />
+          <Card className="relative border-none p-4 h-20 flex items-center bg-yellow-500/10 group hover:bg-yellow-500/20 transition-colors">
+            <div className="flex items-center gap-3">
+              <Sparkles className="h-6 w-6 text-yellow-500" />
               <span className="font-medium">Mood Log</span>
             </div>
           </Card>
         </Link>
         
         <Link to="/dashboard?tab=rewards">
-          <Card className="relative overflow-hidden border-none p-0 h-24 flex flex-col justify-end group">
-            <div className="absolute inset-0 bg-gradient-to-r from-purple-600 to-purple-500 opacity-90 group-hover:opacity-100 transition-opacity"></div>
-            <img 
-              src="https://images.unsplash.com/photo-1589829085413-56de8ae18c73?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80" 
-              alt="Rewards" 
-              className="absolute inset-0 w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
-              width={300}
-              height={100}
-            />
-            <div className="relative z-10 p-4 text-white flex items-center gap-3">
-              <Award className="h-6 w-6" />
+          <Card className="relative border-none p-4 h-20 flex items-center bg-purple-500/10 group hover:bg-purple-500/20 transition-colors">
+            <div className="flex items-center gap-3">
+              <Award className="h-6 w-6 text-purple-500" />
               <span className="font-medium">Rewards</span>
             </div>
           </Card>
@@ -575,10 +510,18 @@ export default function Dashboard() {
           </p>
         </div>
         
-        {/* Reduced height health quotes carousel */}
-        <div className="mb-6 max-h-32 overflow-hidden">
-          <HealthQuotesCarousel />
-        </div>
+        {/* Health quotes without carousel */}
+        <Card className="border-none shadow-sm mb-6 p-4">
+          <div className="flex items-center gap-3">
+            <Sparkles className="h-5 w-5 text-primary" />
+            <blockquote className="text-sm md:text-base font-medium italic">
+              "The greatest wealth is health."
+            </blockquote>
+            <cite className="text-xs md:text-sm font-medium not-italic text-muted-foreground">
+              — Virgil
+            </cite>
+          </div>
+        </Card>
         
         <Tabs defaultValue="dashboard" value={activeTab} onValueChange={handleTabChange}>
           <TabsList className="mb-6">
