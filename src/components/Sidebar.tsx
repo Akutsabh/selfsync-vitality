@@ -1,3 +1,4 @@
+
 import { useEffect, useState } from "react";
 import { Link, useLocation } from "react-router-dom";
 import { Button } from "@/components/ui/button";
@@ -10,7 +11,6 @@ import {
   MessageSquare,
   Book,
   Smile,
-  Activity,
   Moon,
   LogOut,
   Weight,
@@ -50,7 +50,7 @@ const sidebarItems = [
     icon: <Moon className="h-5 w-5" />,
   },
   {
-    title: "Games & Activities",
+    title: "Games",
     href: "/dashboard?tab=games",
     icon: <GamepadIcon className="h-5 w-5" />,
   },
@@ -67,8 +67,11 @@ export function Sidebar() {
   const [isMobile, setIsMobile] = useState(false);
 
   const isActive = (href: string) => {
-    return location.pathname === href || 
-           (location.pathname === "/dashboard" && href.includes("?tab=") && location.search.includes(href.split("?")[1]));
+    if (href.includes("?tab=")) {
+      const tabValue = href.split("?tab=")[1];
+      return location.pathname === "/dashboard" && location.search.includes(`tab=${tabValue}`);
+    }
+    return location.pathname === href;
   };
 
   useEffect(() => {
