@@ -1,3 +1,4 @@
+
 import { useState, useEffect, useRef } from "react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -123,17 +124,16 @@ export default function Chat() {
         <div className="grid md:grid-cols-5 gap-6">
           <div className="hidden md:block md:col-span-2">
             <Card className="overflow-hidden border-none h-full bg-gradient-to-br from-primary/5 to-primary/20">
-              <CardContent className="p-0 h-full flex flex-col items-center justify-center">
-                <div className="relative w-full h-full">
-                  <img 
-                    src="https://images.unsplash.com/photo-1531747118685-ca8fa6e08806?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80" 
-                    alt="AI Assistant" 
-                    className="w-full h-full object-cover"
-                  />
-                  <div className="absolute inset-0 bg-gradient-to-t from-primary/70 to-transparent flex flex-col justify-end p-6 text-white">
-                    <h3 className="text-xl font-semibold mb-2">Your Wellness Assistant</h3>
-                    <p className="opacity-90">I'm here to help you on your wellness journey with evidence-based advice and personalized recommendations.</p>
+              <CardContent className="p-6 h-full flex flex-col items-center justify-center">
+                <div className="flex flex-col items-center text-center">
+                  <div className="w-32 h-32 rounded-full bg-primary/20 flex items-center justify-center mb-6">
+                    <Bot className="h-16 w-16 text-primary" />
                   </div>
+                  <h3 className="text-xl font-semibold mb-2">Your Wellness Assistant</h3>
+                  <p className="opacity-90 text-muted-foreground">
+                    I'm here to help you on your wellness journey with evidence-based advice
+                    and personalized recommendations.
+                  </p>
                 </div>
               </CardContent>
             </Card>
