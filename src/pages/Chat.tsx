@@ -121,26 +121,26 @@ export default function Chat() {
           </p>
         </div>
         
-        <div className="grid md:grid-cols-5 gap-6">
-          <div className="hidden md:block md:col-span-2">
-            <Card className="overflow-hidden border-none h-full bg-gradient-to-br from-primary/5 to-primary/20">
-              <CardContent className="p-6 h-full">
-                <div className="flex items-center gap-4">
-                  <div className="w-12 h-12 rounded-full bg-primary/20 flex items-center justify-center flex-shrink-0">
-                    <Bot className="h-6 w-6 text-primary" />
-                  </div>
-                  <div>
-                    <h3 className="text-lg font-semibold">Your Wellness Assistant</h3>
-                    <p className="opacity-90 text-muted-foreground text-sm">
-                      Here to help with evidence-based wellness advice
-                    </p>
-                  </div>
+        <div className="flex flex-col gap-4">
+          {/* AI Assistant Info Card - Now at the top */}
+          <Card className="overflow-hidden border-none bg-gradient-to-br from-primary/5 to-primary/20">
+            <CardContent className="p-4">
+              <div className="flex items-center gap-4">
+                <div className="w-12 h-12 rounded-full bg-primary/20 flex items-center justify-center flex-shrink-0">
+                  <Bot className="h-6 w-6 text-primary" />
                 </div>
-              </CardContent>
-            </Card>
-          </div>
-        
-          <div className="md:col-span-3 border rounded-lg shadow-sm flex flex-col h-[600px]">
+                <div>
+                  <h3 className="text-lg font-semibold">Your Wellness Assistant</h3>
+                  <p className="opacity-90 text-muted-foreground text-sm">
+                    Here to help with evidence-based wellness advice
+                  </p>
+                </div>
+              </div>
+            </CardContent>
+          </Card>
+          
+          {/* Chat Interface */}
+          <div className="border rounded-lg shadow-sm flex flex-col h-[550px]">
             <div className="flex-1 relative">
               <ScrollArea ref={scrollAreaRef} className="h-full overflow-auto p-4">
                 <div className="space-y-4">
