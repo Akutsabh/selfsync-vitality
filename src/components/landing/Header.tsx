@@ -1,5 +1,5 @@
 
-import { useNavigate } from "react-router-dom";
+import { Link } from "react-router-dom";
 import { Button } from "@/components/ui/button";
 import { 
   NavigationMenu,
@@ -19,8 +19,6 @@ import {
 } from "lucide-react";
 
 export function Header() {
-  const navigate = useNavigate();
-  
   return (
     <header className="border-b bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60">
       <div className="container flex h-16 items-center justify-between">
@@ -31,61 +29,43 @@ export function Header() {
         <NavigationMenu>
           <NavigationMenuList>
             <NavigationMenuItem>
-              <NavigationMenuLink 
-                href="#dashboard" 
-                className={navigationMenuTriggerStyle()}
-                onClick={(e) => { e.preventDefault(); navigate("/login"); }}
-              >
+              <Link to="/login" className={navigationMenuTriggerStyle()}>
                 <LayoutDashboard className="mr-2 h-4 w-4" />
                 Dashboard
-              </NavigationMenuLink>
+              </Link>
             </NavigationMenuItem>
             <NavigationMenuItem>
-              <NavigationMenuLink 
-                href="#journal" 
-                className={navigationMenuTriggerStyle()}
-                onClick={(e) => { e.preventDefault(); navigate("/login"); }}
-              >
+              <Link to="/login" className={navigationMenuTriggerStyle()}>
                 <BookText className="mr-2 h-4 w-4" />
                 Journal
-              </NavigationMenuLink>
+              </Link>
             </NavigationMenuItem>
             <NavigationMenuItem>
-              <NavigationMenuLink 
-                href="#reminders" 
-                className={navigationMenuTriggerStyle()}
-                onClick={(e) => { e.preventDefault(); navigate("/login"); }}
-              >
+              <Link to="/login" className={navigationMenuTriggerStyle()}>
                 <Bell className="mr-2 h-4 w-4" />
                 Reminders
-              </NavigationMenuLink>
+              </Link>
             </NavigationMenuItem>
             <NavigationMenuItem>
-              <NavigationMenuLink 
-                href="#relax" 
-                className={navigationMenuTriggerStyle()}
-                onClick={(e) => { e.preventDefault(); navigate("/login"); }}
-              >
+              <Link to="/login" className={navigationMenuTriggerStyle()}>
                 <Moon className="mr-2 h-4 w-4" />
                 Relax
-              </NavigationMenuLink>
+              </Link>
             </NavigationMenuItem>
             <NavigationMenuItem>
-              <NavigationMenuLink 
-                href="#achievements" 
-                className={navigationMenuTriggerStyle()}
-                onClick={(e) => { e.preventDefault(); navigate("/login"); }}
-              >
+              <Link to="/login" className={navigationMenuTriggerStyle()}>
                 <Award className="mr-2 h-4 w-4" />
                 Achievements
-              </NavigationMenuLink>
+              </Link>
             </NavigationMenuItem>
           </NavigationMenuList>
         </NavigationMenu>
         
         <div className="flex items-center gap-4">
           <ThemeToggle />
-          <Button onClick={() => navigate("/login")} variant="default">Sign In</Button>
+          <Button asChild variant="default">
+            <Link to="/login">Sign In</Link>
+          </Button>
         </div>
       </div>
     </header>

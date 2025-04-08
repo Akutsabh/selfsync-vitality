@@ -1,5 +1,5 @@
 
-import { useNavigate } from "react-router-dom";
+import { Navigate } from "react-router-dom";
 import { useAuth } from "@/contexts/AuthContext";
 import { MemoryGame } from "@/components/MemoryGame";
 import { Header } from "@/components/landing/Header";
@@ -9,13 +9,11 @@ import { DailyAffirmation } from "@/components/landing/DailyAffirmation";
 import { CallToAction } from "@/components/landing/CallToAction";
 
 const Index = () => {
-  const navigate = useNavigate();
   const { isAuthenticated } = useAuth();
   
   // If user is authenticated, redirect to dashboard
   if (isAuthenticated) {
-    navigate('/dashboard');
-    return null;
+    return <Navigate to="/dashboard" />;
   }
   
   return (
