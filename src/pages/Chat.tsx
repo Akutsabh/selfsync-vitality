@@ -124,16 +124,17 @@ export default function Chat() {
         <div className="grid md:grid-cols-5 gap-6">
           <div className="hidden md:block md:col-span-2">
             <Card className="overflow-hidden border-none h-full bg-gradient-to-br from-primary/5 to-primary/20">
-              <CardContent className="p-6 h-full flex flex-col items-center justify-center">
-                <div className="flex flex-col items-center text-center">
-                  <div className="w-32 h-32 rounded-full bg-primary/20 flex items-center justify-center mb-6">
-                    <Bot className="h-16 w-16 text-primary" />
+              <CardContent className="p-6 h-full">
+                <div className="flex items-center gap-4">
+                  <div className="w-12 h-12 rounded-full bg-primary/20 flex items-center justify-center flex-shrink-0">
+                    <Bot className="h-6 w-6 text-primary" />
                   </div>
-                  <h3 className="text-xl font-semibold mb-2">Your Wellness Assistant</h3>
-                  <p className="opacity-90 text-muted-foreground">
-                    I'm here to help you on your wellness journey with evidence-based advice
-                    and personalized recommendations.
-                  </p>
+                  <div>
+                    <h3 className="text-lg font-semibold">Your Wellness Assistant</h3>
+                    <p className="opacity-90 text-muted-foreground text-sm">
+                      Here to help with evidence-based wellness advice
+                    </p>
+                  </div>
                 </div>
               </CardContent>
             </Card>
