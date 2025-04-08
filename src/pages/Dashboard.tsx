@@ -9,6 +9,7 @@ import { useAuth } from "@/contexts/AuthContext";
 import { HealthQuiz } from "@/components/landing/HealthQuiz";
 import { HealthQuotesCarousel } from "@/components/dashboard/HealthQuotesCarousel";
 import { WellnessMemoryGame } from "@/components/games/WellnessMemoryGame";
+import { Certificate } from "@/components/dashboard/Certificate";
 import {
   DropletIcon,
   MoonIcon,
@@ -68,7 +69,6 @@ export default function Dashboard() {
     return () => clearTimeout(timer);
   }, []);
   
-  // Memoize data to prevent unnecessary re-renders
   const todayReminders = useMemo(() => [
     { id: "1", title: "Drink water", time: "Every 2 hours", icon: <DropletIcon />, completed: true },
     { id: "2", title: "Meditation", time: "9:00 AM", icon: <BrainCircuitIcon />, completed: true },
@@ -91,7 +91,6 @@ export default function Dashboard() {
     { id: 4, name: "Gratitude Guru", description: "Added to gratitude journal 5 days in a row", icon: <Heart className="h-8 w-8 text-rose-500" /> },
   ], []);
 
-  // Optimize rendering of tabs
   const renderDashboardTab = () => (
     <TabsContent value="dashboard" className="space-y-6">
       <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
@@ -236,7 +235,6 @@ export default function Dashboard() {
         </Card>
       </div>
       
-      {/* Feature cards without images */}
       <div className="grid gap-4 grid-cols-2 md:grid-cols-4">
         <Link to="/mood-tracker" className="group">
           <Card className="border-none shadow-sm h-full transition-all group-hover:shadow-md group-hover:-translate-y-1">
@@ -299,7 +297,6 @@ export default function Dashboard() {
         </Link>
       </div>
       
-      {/* Quick access cards without images */}
       <div className="grid gap-4 grid-cols-2 md:grid-cols-4">
         <Link to="/chat">
           <Card className="relative border-none p-4 h-20 flex items-center bg-primary/10 group hover:bg-primary/20 transition-colors">
@@ -461,6 +458,8 @@ export default function Dashboard() {
               </CardContent>
             </Card>
           </div>
+
+          <Certificate streakDays={5} requiredDays={7} wellnessPoints={1250} />
         </CardContent>
       </Card>
     </TabsContent>
@@ -510,7 +509,6 @@ export default function Dashboard() {
           </p>
         </div>
         
-        {/* Health quotes without carousel */}
         <Card className="border-none shadow-sm mb-6 p-4">
           <div className="flex items-center gap-3">
             <Sparkles className="h-5 w-5 text-primary" />
