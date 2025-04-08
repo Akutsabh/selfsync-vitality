@@ -9,10 +9,11 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/com
 import Layout from "@/components/Layout";
 import Logo from "@/components/Logo";
 import { Loader2 } from "lucide-react";
+import { Alert, AlertDescription } from "@/components/ui/alert";
 
 export default function Register() {
   const navigate = useNavigate();
-  const { register, loading, isAuthenticated } = useAuth();
+  const { register, loading, isAuthenticated, error: authError } = useAuth();
   const [name, setName] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
@@ -51,9 +52,9 @@ export default function Register() {
     
     try {
       await register(name, email, password);
-      navigate("/dashboard");
     } catch (error) {
       console.error("Registration error:", error);
+      // Error is handled in the auth context
     }
   };
 
@@ -74,10 +75,12 @@ export default function Register() {
             </CardHeader>
             <CardContent>
               <form onSubmit={handleSubmit} className="space-y-4">
-                {formError && (
-                  <div className="bg-destructive/10 text-destructive text-sm p-3 rounded-md">
-                    {formError}
-                  </div>
+                {(formError || authError) && (
+                  <Alert variant="destructive">
+                    <AlertDescription>
+                      {formError || authError}
+                    </AlertDescription>
+                  </Alert>
                 )}
                 
                 <div className="space-y-2">

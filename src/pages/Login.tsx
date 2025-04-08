@@ -9,10 +9,11 @@ import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle }
 import Layout from "@/components/Layout";
 import Logo from "@/components/Logo";
 import { Loader2 } from "lucide-react";
+import { Alert, AlertDescription } from "@/components/ui/alert";
 
 export default function Login() {
   const navigate = useNavigate();
-  const { login, loading, isAuthenticated } = useAuth();
+  const { login, loading, isAuthenticated, error: authError } = useAuth();
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [formError, setFormError] = useState("");
@@ -39,9 +40,9 @@ export default function Login() {
     
     try {
       await login(email, password);
-      navigate("/dashboard");
     } catch (error) {
       console.error("Login error:", error);
+      // Error is handled in the auth context
     }
   };
 
@@ -62,10 +63,12 @@ export default function Login() {
             </CardHeader>
             <CardContent>
               <form onSubmit={handleSubmit} className="space-y-4">
-                {formError && (
-                  <div className="bg-destructive/10 text-destructive text-sm p-3 rounded-md">
-                    {formError}
-                  </div>
+                {(formError || authError) && (
+                  <Alert variant="destructive">
+                    <AlertDescription>
+                      {formError || authError}
+                    </AlertDescription>
+                  </Alert>
                 )}
                 
                 <div className="space-y-2">
@@ -115,12 +118,6 @@ export default function Login() {
                   <Link to="/register" className="text-primary font-medium hover:underline">
                     Sign up
                   </Link>
-                </div>
-                
-                <div className="text-center text-xs text-muted-foreground">
-                  <p>Demo credentials:</p>
-                  <p>Email: demo@example.com</p>
-                  <p>Password: password</p>
                 </div>
               </form>
             </CardContent>

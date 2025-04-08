@@ -1,21 +1,18 @@
+
 import React, { createContext, useState, useContext, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { toast } from "sonner";
-
-interface User {
-  id: string;
-  email: string;
-  name: string;
-  avatar?: string;
-}
+import { supabase } from "@/integrations/supabase/client";
+import { User, Session } from "@supabase/supabase-js";
 
 interface AuthContextType {
   user: User | null;
+  session: Session | null;
   loading: boolean;
   error: string | null;
   login: (email: string, password: string) => Promise<void>;
   register: (name: string, email: string, password: string) => Promise<void>;
-  logout: () => void;
+  logout: () => Promise<void>;
   isAuthenticated: boolean;
 }
 
@@ -31,21 +28,29 @@ export const useAuth = () => {
 
 export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children }) => {
   const [user, setUser] = useState<User | null>(null);
+  const [session, setSession] = useState<Session | null>(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
   const navigate = useNavigate();
 
   useEffect(() => {
-    const storedUser = localStorage.getItem("selfsync_user");
-    if (storedUser) {
-      try {
-        setUser(JSON.parse(storedUser));
-      } catch (e) {
-        console.error("Failed to parse stored user:", e);
-        localStorage.removeItem("selfsync_user");
+    // Set up auth state listener FIRST
+    const { data: { subscription } } = supabase.auth.onAuthStateChange(
+      (event, session) => {
+        console.log("Auth state changed:", event, session);
+        setSession(session);
+        setUser(session?.user ?? null);
       }
-    }
-    setLoading(false);
+    );
+
+    // THEN check for existing session
+    supabase.auth.getSession().then(({ data: { session } }) => {
+      setSession(session);
+      setUser(session?.user ?? null);
+      setLoading(false);
+    });
+
+    return () => subscription.unsubscribe();
   }, []);
 
   const login = async (email: string, password: string) => {
@@ -53,36 +58,21 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
     setError(null);
     
     try {
-      await new Promise((resolve) => setTimeout(resolve, 1000));
+      const { data, error } = await supabase.auth.signInWithPassword({
+        email,
+        password,
+      });
       
-      if (email === "demo@example.com" && password === "password") {
-        const newUser = {
-          id: "user1",
-          email: "demo@example.com",
-          name: "Demo User",
-          avatar: "/assets/avatar.png"
-        };
-        
-        setUser(newUser);
-        localStorage.setItem("selfsync_user", JSON.stringify(newUser));
-        toast.success("Logged in successfully!");
-        navigate("/dashboard");
-      } else {
-        const newUser = {
-          id: "user" + Math.random().toString(36).substr(2, 9),
-          email: email,
-          name: email.split('@')[0],
-        };
-        
-        setUser(newUser);
-        localStorage.setItem("selfsync_user", JSON.stringify(newUser));
-        toast.success("Logged in successfully!");
-        navigate("/dashboard");
+      if (error) {
+        throw error;
       }
-    } catch (err) {
+
+      toast.success("Logged in successfully!");
+      navigate("/dashboard");
+    } catch (err: any) {
       console.error("Login error:", err);
-      setError("Failed to login. Please try again.");
-      toast.error("Login failed. Please try again.");
+      setError(err?.message || "Failed to login. Please try again.");
+      toast.error(err?.message || "Login failed. Please try again.");
     } finally {
       setLoading(false);
     }
@@ -93,41 +83,54 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
     setError(null);
     
     try {
-      await new Promise((resolve) => setTimeout(resolve, 1000));
-      
-      const newUser = {
-        id: "user" + Math.random().toString(36).substr(2, 9),
+      const { data, error } = await supabase.auth.signUp({
         email,
-        name,
-      };
+        password,
+        options: {
+          data: {
+            name,
+          },
+        }
+      });
       
-      setUser(newUser);
-      localStorage.setItem("selfsync_user", JSON.stringify(newUser));
-      toast.success("Account created successfully!");
+      if (error) {
+        throw error;
+      }
+      
+      toast.success("Account created successfully! Please check your email to verify your account.");
       navigate("/dashboard");
-    } catch (err) {
+    } catch (err: any) {
       console.error("Registration error:", err);
-      setError("Failed to register. Please try again.");
-      toast.error("Registration failed. Please try again.");
+      setError(err?.message || "Failed to register. Please try again.");
+      toast.error(err?.message || "Registration failed. Please try again.");
     } finally {
       setLoading(false);
     }
   };
 
-  const logout = () => {
-    setUser(null);
-    localStorage.removeItem("selfsync_user");
-    toast.success("Logged out successfully");
+  const logout = async () => {
+    try {
+      const { error } = await supabase.auth.signOut();
+      if (error) {
+        throw error;
+      }
+      navigate("/login");
+      toast.success("Logged out successfully");
+    } catch (err: any) {
+      console.error("Logout error:", err);
+      toast.error(err?.message || "Logout failed. Please try again.");
+    }
   };
 
   const value = {
     user,
+    session,
     loading,
     error,
     login,
     register,
     logout,
-    isAuthenticated: !!user,
+    isAuthenticated: !!session,
   };
 
   return <AuthContext.Provider value={value}>{children}</AuthContext.Provider>;
