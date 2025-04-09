@@ -22,7 +22,7 @@ interface CertificateProps {
   wellnessPoints?: number;
 }
 
-export function Certificate({ streakDays, requiredDays = 7, wellnessPoints = 1250 }: CertificateProps) {
+export function Certificate({ streakDays, requiredDays = 5, wellnessPoints = 1250 }: CertificateProps) {
   const { user } = useAuth();
   const [isGenerating, setIsGenerating] = useState(false);
   const isEligible = streakDays >= requiredDays;

@@ -459,7 +459,7 @@ export default function Dashboard() {
             </Card>
           </div>
 
-          <Certificate streakDays={5} requiredDays={7} wellnessPoints={1250} />
+          <Certificate streakDays={5} requiredDays={5} wellnessPoints={1250} />
         </CardContent>
       </Card>
     </TabsContent>
