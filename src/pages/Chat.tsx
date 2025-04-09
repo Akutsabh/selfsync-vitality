@@ -1,4 +1,3 @@
-
 import { useState, useEffect, useRef } from "react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -38,7 +37,6 @@ export default function Chat() {
   const [isTyping, setIsTyping] = useState(false);
   const scrollAreaRef = useRef<HTMLDivElement>(null);
   
-  // Auto scroll to bottom whenever messages change
   useEffect(() => {
     if (scrollAreaRef.current) {
       const scrollContainer = scrollAreaRef.current.querySelector('[data-radix-scroll-area-viewport]');
@@ -62,7 +60,6 @@ export default function Chat() {
     setInput('');
     setIsTyping(true);
     
-    // Simulate AI response with delay
     setTimeout(() => {
       const response = generateResponse(input);
       const assistantMessage: Message = {
@@ -88,7 +85,6 @@ export default function Chat() {
     setInput(question);
   };
   
-  // Simple pattern matching for demo responses
   const generateResponse = (message: string): string => {
     const lowerMsg = message.toLowerCase();
     
@@ -122,7 +118,6 @@ export default function Chat() {
         </div>
         
         <div className="flex flex-col gap-4">
-          {/* AI Assistant Info Card - Now at the top */}
           <Card className="overflow-hidden border-none bg-gradient-to-br from-primary/5 to-primary/20">
             <CardContent className="p-4">
               <div className="flex items-center gap-4">
@@ -139,7 +134,6 @@ export default function Chat() {
             </CardContent>
           </Card>
           
-          {/* Chat Interface */}
           <div className="border rounded-lg shadow-sm flex flex-col h-[550px]">
             <div className="flex-1 relative">
               <ScrollArea ref={scrollAreaRef} className="h-full overflow-auto p-4">

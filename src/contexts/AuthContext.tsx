@@ -5,8 +5,14 @@ import { toast } from "sonner";
 import { supabase } from "@/integrations/supabase/client";
 import { User, Session } from "@supabase/supabase-js";
 
+// Extended user type to include metadata
+type UserWithMetadata = User & {
+  name?: string;
+  email?: string;
+};
+
 interface AuthContextType {
-  user: User | null;
+  user: UserWithMetadata | null;
   session: Session | null;
   loading: boolean;
   error: string | null;
@@ -27,7 +33,7 @@ export const useAuth = () => {
 };
 
 export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children }) => {
-  const [user, setUser] = useState<User | null>(null);
+  const [user, setUser] = useState<UserWithMetadata | null>(null);
   const [session, setSession] = useState<Session | null>(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
@@ -39,14 +45,37 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
       (event, session) => {
         console.log("Auth state changed:", event, session);
         setSession(session);
-        setUser(session?.user ?? null);
+        
+        // Ensure we handle the user metadata correctly
+        if (session?.user) {
+          const userData: UserWithMetadata = {
+            ...session.user,
+            name: session.user.user_metadata?.name || session.user.user_metadata?.full_name,
+            email: session.user.email
+          };
+          setUser(userData);
+        } else {
+          setUser(null);
+        }
       }
     );
 
     // THEN check for existing session
     supabase.auth.getSession().then(({ data: { session } }) => {
       setSession(session);
-      setUser(session?.user ?? null);
+      
+      // Handle user data with metadata
+      if (session?.user) {
+        const userData: UserWithMetadata = {
+          ...session.user,
+          name: session.user.user_metadata?.name || session.user.user_metadata?.full_name,
+          email: session.user.email
+        };
+        setUser(userData);
+      } else {
+        setUser(null);
+      }
+      
       setLoading(false);
     });
 
