@@ -1,4 +1,3 @@
-
 import { useState, useEffect } from "react";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
@@ -24,16 +23,28 @@ export function SoundPlayer({ sounds, audioManager, activeExercise, stopExercise
   const [activeSoundIds, setActiveSoundIds] = useState<string[]>([]);
   const [loadingSounds, setLoadingSounds] = useState<string[]>([]);
 
-  // Pre-load all audio files on mount
   useEffect(() => {
     const loadSounds = async () => {
+      const loadingPromises = [];
+      setLoadingSounds(sounds.map(s => s.id));
+      
       for (const sound of sounds) {
         try {
-          await audioManager.load(sound.id, sound.audioSrc);
+          const loadPromise = audioManager.load(sound.id, sound.audioSrc);
+          loadingPromises.push(loadPromise.then(() => {
+            setLoadingSounds(prev => prev.filter(id => id !== sound.id));
+          }).catch(error => {
+            console.error(`Failed to load sound ${sound.id}:`, error);
+            toast.error(`Could not load "${sound.name}" sound file`);
+            setLoadingSounds(prev => prev.filter(id => id !== sound.id));
+          }));
         } catch (error) {
-          console.error(`Failed to load sound ${sound.id}:`, error);
+          console.error(`Error setting up sound ${sound.id}:`, error);
+          setLoadingSounds(prev => prev.filter(id => id !== sound.id));
         }
       }
+      
+      await Promise.allSettled(loadingPromises);
     };
     
     loadSounds();
@@ -43,11 +54,11 @@ export function SoundPlayer({ sounds, audioManager, activeExercise, stopExercise
     };
   }, [sounds, audioManager]);
 
-  // Handle audio play/pause based on state
   useEffect(() => {
     const playActiveSounds = async () => {
       if (isPlaying) {
-        setLoadingSounds([...activeSoundIds]);
+        const currentlyLoading = [...activeSoundIds];
+        setLoadingSounds(currentlyLoading);
         
         for (const id of activeSoundIds) {
           try {
@@ -55,6 +66,7 @@ export function SoundPlayer({ sounds, audioManager, activeExercise, stopExercise
             audioManager.setVolume(id, volume);
             setLoadingSounds(prev => prev.filter(soundId => soundId !== id));
           } catch (err) {
+            console.error(`Failed to play ${id}:`, err);
             setLoadingSounds(prev => prev.filter(soundId => soundId !== id));
             toast.error(`Failed to play ${sounds.find(s => s.id === id)?.name}. Please try again.`);
           }
@@ -68,7 +80,6 @@ export function SoundPlayer({ sounds, audioManager, activeExercise, stopExercise
     playActiveSounds();
   }, [isPlaying, activeSoundIds, audioManager, volume, sounds]);
 
-  // Handle volume change
   useEffect(() => {
     audioManager.setVolumeAll(volume);
   }, [volume, audioManager]);
@@ -78,7 +89,6 @@ export function SoundPlayer({ sounds, audioManager, activeExercise, stopExercise
       setActiveSoundIds(activeSoundIds.filter(id => id !== soundId));
       audioManager.pause(soundId);
     } else {
-      // Limit to 3 active sounds
       if (activeSoundIds.length >= 3) {
         toast.warning("You can only mix up to 3 sounds at once");
         return;
@@ -94,6 +104,7 @@ export function SoundPlayer({ sounds, audioManager, activeExercise, stopExercise
             await audioManager.play(soundId);
             audioManager.setVolume(soundId, volume);
           } catch (error) {
+            console.error(`Failed to play ${soundId}:`, error);
             toast.error(`Failed to play ${sounds.find(s => s.id === soundId)?.name}. Please try again.`);
           } finally {
             setLoadingSounds(prev => prev.filter(id => id !== soundId));
@@ -124,7 +135,6 @@ export function SoundPlayer({ sounds, audioManager, activeExercise, stopExercise
     setVolume(value[0]);
   };
 
-  // Handle timer set for sound playback
   const handleSetTimer = (minutes: number) => {
     toast.success(`Timer set for ${minutes} minutes`);
     

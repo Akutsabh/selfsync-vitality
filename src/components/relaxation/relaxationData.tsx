@@ -13,18 +13,18 @@ import {
 import { BreathingExercise, Sound } from "./types";
 
 export const sounds: Sound[] = [
-  { id: "rain", name: "Rain", icon: <Cloud />, category: "nature", audioSrc: "https://relaxing-sounds.s3.amazonaws.com/nature/rain.mp3" },
-  { id: "thunder", name: "Thunder Storm", icon: <Cloud />, category: "nature", audioSrc: "https://relaxing-sounds.s3.amazonaws.com/nature/thunder.mp3" },
-  { id: "forest", name: "Forest", icon: <Leaf />, category: "nature", audioSrc: "https://relaxing-sounds.s3.amazonaws.com/nature/forest.mp3" },
-  { id: "waves", name: "Ocean Waves", icon: <Waves />, category: "nature", audioSrc: "https://relaxing-sounds.s3.amazonaws.com/nature/waves.mp3" },
-  { id: "wind", name: "Wind", icon: <Wind />, category: "nature", audioSrc: "https://relaxing-sounds.s3.amazonaws.com/nature/wind.mp3" },
-  { id: "fire", name: "Fireplace", icon: <Flame />, category: "ambient", audioSrc: "https://relaxing-sounds.s3.amazonaws.com/ambient/fire.mp3" },
-  { id: "cafe", name: "Cafe", icon: <Coffee />, category: "ambient", audioSrc: "https://relaxing-sounds.s3.amazonaws.com/ambient/cafe.mp3" },
-  { id: "white", name: "White Noise", icon: <VolumeX />, category: "white", audioSrc: "https://relaxing-sounds.s3.amazonaws.com/noise/white.mp3" },
-  { id: "pink", name: "Pink Noise", icon: <VolumeX />, category: "white", audioSrc: "https://relaxing-sounds.s3.amazonaws.com/noise/pink.mp3" },
-  { id: "brown", name: "Brown Noise", icon: <VolumeX />, category: "white", audioSrc: "https://relaxing-sounds.s3.amazonaws.com/noise/brown.mp3" },
-  { id: "sleep", name: "Sleep Music", icon: <Moon />, category: "sleep", audioSrc: "https://relaxing-sounds.s3.amazonaws.com/sleep/sleep.mp3" },
-  { id: "lullaby", name: "Lullaby", icon: <Music />, category: "sleep", audioSrc: "https://relaxing-sounds.s3.amazonaws.com/sleep/lullaby.mp3" },
+  { id: "rain", name: "Rain", icon: <Cloud />, category: "nature", audioSrc: "https://assets.codepen.io/858/rain.mp3" },
+  { id: "thunder", name: "Thunder Storm", icon: <Cloud />, category: "nature", audioSrc: "https://assets.codepen.io/858/storm.mp3" },
+  { id: "forest", name: "Forest", icon: <Leaf />, category: "nature", audioSrc: "https://assets.codepen.io/858/forest.mp3" },
+  { id: "waves", name: "Ocean Waves", icon: <Waves />, category: "nature", audioSrc: "https://assets.codepen.io/858/waves.mp3" },
+  { id: "wind", name: "Wind", icon: <Wind />, category: "nature", audioSrc: "https://assets.codepen.io/858/wind.mp3" },
+  { id: "fire", name: "Fireplace", icon: <Flame />, category: "ambient", audioSrc: "https://assets.codepen.io/858/fire.mp3" },
+  { id: "cafe", name: "Cafe", icon: <Coffee />, category: "ambient", audioSrc: "https://assets.codepen.io/858/cafe.mp3" },
+  { id: "white", name: "White Noise", icon: <VolumeX />, category: "white", audioSrc: "https://assets.codepen.io/858/white_noise.mp3" },
+  { id: "pink", name: "Pink Noise", icon: <VolumeX />, category: "white", audioSrc: "https://assets.codepen.io/858/pink_noise.mp3" },
+  { id: "brown", name: "Brown Noise", icon: <VolumeX />, category: "white", audioSrc: "https://assets.codepen.io/858/brown_noise.mp3" },
+  { id: "sleep", name: "Sleep Music", icon: <Moon />, category: "sleep", audioSrc: "https://assets.codepen.io/858/sleep.mp3" },
+  { id: "lullaby", name: "Lullaby", icon: <Music />, category: "sleep", audioSrc: "https://assets.codepen.io/858/lullaby.mp3" },
 ];
 
 export const soundCombinations = [

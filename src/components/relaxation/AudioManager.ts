@@ -9,13 +9,19 @@ export class AudioManager {
       const audio = new Audio();
       audio.loop = true;
       audio.preload = "auto";
+      audio.crossOrigin = "anonymous"; // Add cross-origin support
       
       const loadPromise = new Promise<void>((resolve, reject) => {
-        audio.oncanplaythrough = () => resolve();
-        audio.onerror = (e) => reject(new Error(`Failed to load audio: ${e}`));
+        audio.addEventListener("canplaythrough", () => resolve(), { once: true });
+        audio.addEventListener("error", (e) => {
+          console.error(`Error loading audio ${id}:`, e);
+          reject(new Error(`Failed to load audio: ${e}`));
+        }, { once: true });
         
         // Set the source after adding event listeners
         audio.src = src;
+        // Start loading the audio
+        audio.load();
       });
       
       this.audioElements.set(id, audio);
@@ -97,5 +103,28 @@ export class AudioManager {
     });
     this.audioElements.clear();
     this.loadingPromises.clear();
+  }
+  
+  // Replace audio source
+  replaceSource(id: string, newSrc: string): Promise<void> {
+    const audio = this.audioElements.get(id);
+    if (audio) {
+      this.loadingPromises.delete(id);
+      
+      const loadPromise = new Promise<void>((resolve, reject) => {
+        audio.addEventListener("canplaythrough", () => resolve(), { once: true });
+        audio.addEventListener("error", (e) => reject(new Error(`Failed to load audio: ${e}`)), { once: true });
+        
+        // Update the source
+        audio.pause();
+        audio.src = newSrc;
+        audio.load();
+      });
+      
+      this.loadingPromises.set(id, loadPromise);
+      return loadPromise;
+    }
+    
+    return this.load(id, newSrc);
   }
 }
