@@ -22,18 +22,51 @@ export function SoundPlayer({ sounds, audioManager, activeExercise, stopExercise
   const [isPlaying, setIsPlaying] = useState(false);
   const [volume, setVolume] = useState(70);
   const [activeSoundIds, setActiveSoundIds] = useState<string[]>([]);
+  const [loadingSounds, setLoadingSounds] = useState<string[]>([]);
+
+  // Pre-load all audio files on mount
+  useEffect(() => {
+    const loadSounds = async () => {
+      for (const sound of sounds) {
+        try {
+          await audioManager.load(sound.id, sound.audioSrc);
+        } catch (error) {
+          console.error(`Failed to load sound ${sound.id}:`, error);
+        }
+      }
+    };
+    
+    loadSounds();
+    
+    return () => {
+      audioManager.pauseAll();
+    };
+  }, [sounds, audioManager]);
 
   // Handle audio play/pause based on state
   useEffect(() => {
-    if (isPlaying) {
-      activeSoundIds.forEach(id => {
-        audioManager.play(id);
-        audioManager.setVolume(id, volume);
-      });
-    } else {
-      audioManager.pauseAll();
-    }
-  }, [isPlaying, activeSoundIds, audioManager, volume]);
+    const playActiveSounds = async () => {
+      if (isPlaying) {
+        setLoadingSounds([...activeSoundIds]);
+        
+        for (const id of activeSoundIds) {
+          try {
+            await audioManager.play(id);
+            audioManager.setVolume(id, volume);
+            setLoadingSounds(prev => prev.filter(soundId => soundId !== id));
+          } catch (err) {
+            setLoadingSounds(prev => prev.filter(soundId => soundId !== id));
+            toast.error(`Failed to play ${sounds.find(s => s.id === id)?.name}. Please try again.`);
+          }
+        }
+      } else {
+        audioManager.pauseAll();
+        setLoadingSounds([]);
+      }
+    };
+    
+    playActiveSounds();
+  }, [isPlaying, activeSoundIds, audioManager, volume, sounds]);
 
   // Handle volume change
   useEffect(() => {
@@ -55,8 +88,19 @@ export function SoundPlayer({ sounds, audioManager, activeExercise, stopExercise
       setActiveSoundIds(newActiveSoundIds);
       
       if (isPlaying) {
-        audioManager.play(soundId);
-        audioManager.setVolume(soundId, volume);
+        const playSound = async () => {
+          setLoadingSounds(prev => [...prev, soundId]);
+          try {
+            await audioManager.play(soundId);
+            audioManager.setVolume(soundId, volume);
+          } catch (error) {
+            toast.error(`Failed to play ${sounds.find(s => s.id === soundId)?.name}. Please try again.`);
+          } finally {
+            setLoadingSounds(prev => prev.filter(id => id !== soundId));
+          }
+        };
+        
+        playSound();
       }
     }
   };
@@ -136,8 +180,13 @@ export function SoundPlayer({ sounds, audioManager, activeExercise, stopExercise
                           variant={activeSoundIds.includes(sound.id) ? "default" : "outline"}
                           className="h-auto py-3 flex flex-col items-center gap-2"
                           onClick={() => handleSoundToggle(sound.id)}
+                          disabled={loadingSounds.includes(sound.id)}
                         >
-                          {sound.icon}
+                          {loadingSounds.includes(sound.id) ? (
+                            <div className="h-5 w-5 rounded-full border-2 border-current border-t-transparent animate-spin" />
+                          ) : (
+                            sound.icon
+                          )}
                           <span>{sound.name}</span>
                         </Button>
                       ))}
@@ -249,7 +298,13 @@ export function SoundPlayer({ sounds, audioManager, activeExercise, stopExercise
                             key={id}
                             className="h-16 w-16 rounded-full bg-primary/10 flex items-center justify-center"
                           >
-                            <div className="text-primary">{sound?.icon}</div>
+                            <div className="text-primary">
+                              {loadingSounds.includes(id) ? (
+                                <div className="h-6 w-6 rounded-full border-2 border-current border-t-transparent animate-spin" />
+                              ) : (
+                                sound?.icon
+                              )}
+                            </div>
                           </div>
                         );
                       })}
@@ -274,7 +329,7 @@ export function SoundPlayer({ sounds, audioManager, activeExercise, stopExercise
                     variant="outline"
                     size="icon"
                     className="h-10 w-10 rounded-full"
-                    disabled={activeSoundIds.length === 0}
+                    disabled={activeSoundIds.length === 0 || loadingSounds.length > 0}
                     onClick={handlePlayPause}
                   >
                     {isPlaying ? <Pause className="h-5 w-5" /> : <Play className="h-5 w-5" />}
@@ -298,13 +353,20 @@ export function SoundPlayer({ sounds, audioManager, activeExercise, stopExercise
                         key={id}
                         className="flex items-center gap-1.5 text-sm bg-muted rounded-full px-3 py-1"
                       >
-                        <div className="text-primary">{sound?.icon}</div>
+                        <div className="text-primary">
+                          {loadingSounds.includes(id) ? (
+                            <div className="h-3 w-3 rounded-full border-1.5 border-current border-t-transparent animate-spin" />
+                          ) : (
+                            sound?.icon
+                          )}
+                        </div>
                         <span>{sound?.name}</span>
                         <Button
                           variant="ghost"
                           size="icon"
                           className="h-4 w-4 ml-1"
                           onClick={() => handleSoundToggle(id)}
+                          disabled={loadingSounds.includes(id)}
                         >
                           <Close className="h-3 w-3" />
                         </Button>
