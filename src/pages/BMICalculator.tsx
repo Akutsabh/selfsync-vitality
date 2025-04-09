@@ -1,4 +1,3 @@
-
 import { useState, useEffect } from "react";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
@@ -27,30 +26,24 @@ export default function BMICalculator() {
     let heightInMeters: number;
     let weightInKg: number;
     
-    // Convert height to meters
     if (heightUnit === 'cm') {
       heightInMeters = Number(height) / 100;
     } else {
-      // Convert feet and inches to meters
       const totalInches = (Number(heightFt) * 12) + Number(heightIn);
       heightInMeters = totalInches * 0.0254;
     }
     
-    // Convert weight to kg
     if (weightUnit === 'kg') {
       weightInKg = Number(weight);
     } else {
-      // Convert pounds to kg
       weightInKg = Number(weight) * 0.453592;
     }
     
-    // Calculate BMI
     const calculatedBMI = weightInKg / (heightInMeters * heightInMeters);
     
     if (!isNaN(calculatedBMI) && isFinite(calculatedBMI)) {
       setBmi(parseFloat(calculatedBMI.toFixed(1)));
       
-      // Determine BMI category
       if (calculatedBMI < 18.5) {
         setBmiCategory('underweight');
       } else if (calculatedBMI >= 18.5 && calculatedBMI < 25) {
@@ -63,7 +56,6 @@ export default function BMICalculator() {
     }
   };
   
-  // Generate recommendations based on BMI category
   useEffect(() => {
     if (bmiCategory === 'underweight') {
       setRecommendations([
@@ -176,7 +168,6 @@ export default function BMICalculator() {
               </CardHeader>
               <CardContent>
                 <form onSubmit={handleSubmit} className="space-y-6">
-                  {/* Height Section */}
                   <div className="space-y-4">
                     <div>
                       <Label>Height</Label>
@@ -236,7 +227,6 @@ export default function BMICalculator() {
                     )}
                   </div>
                   
-                  {/* Weight Section */}
                   <div className="space-y-4">
                     <div>
                       <Label>Weight</Label>
@@ -355,16 +345,6 @@ export default function BMICalculator() {
                 </p>
               </div>
             )}
-            
-            <div className="bg-gradient-to-r from-primary/10 to-secondary/10 rounded-lg p-6 animate-fade-in">
-              <h3 className="font-semibold text-lg mb-3">Try Our Wellness Game</h3>
-              <p className="text-muted-foreground mb-4">
-                Take a quick quiz to test your health knowledge and earn wellness points!
-              </p>
-              <Button variant="outline" className="bg-background/80 backdrop-blur">
-                Play Health Quiz
-              </Button>
-            </div>
           </div>
         </div>
       </div>
