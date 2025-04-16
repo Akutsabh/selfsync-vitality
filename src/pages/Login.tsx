@@ -1,5 +1,5 @@
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { useNavigate, Link } from "react-router-dom";
 import { useAuth } from "@/contexts/AuthContext";
 import { Button } from "@/components/ui/button";
@@ -18,11 +18,13 @@ export default function Login() {
   const [password, setPassword] = useState("");
   const [formError, setFormError] = useState("");
   
-  // If already authenticated, redirect to dashboard
-  if (isAuthenticated) {
-    navigate("/dashboard");
-    return null;
-  }
+  // Use useEffect to handle redirects after component mounts
+  useEffect(() => {
+    // If already authenticated, redirect to dashboard
+    if (isAuthenticated) {
+      navigate("/dashboard");
+    }
+  }, [isAuthenticated, navigate]);
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -40,6 +42,7 @@ export default function Login() {
     
     try {
       await login(email, password);
+      // The redirect will happen via the useEffect after auth state updates
     } catch (error) {
       console.error("Login error:", error);
       // Error is handled in the auth context
