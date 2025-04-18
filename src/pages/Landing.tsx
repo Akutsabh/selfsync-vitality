@@ -1,6 +1,6 @@
-
 import { useNavigate } from "react-router-dom";
 import { Button } from "@/components/ui/button";
+import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogDescription, DialogFooter } from "@/components/ui/dialog";
 import { ThemeToggle } from "@/components/ThemeToggle";
 import Layout from "@/components/Layout";
 import Logo from "@/components/Logo";
@@ -11,16 +11,97 @@ import {
   MessageSquare, 
   BarChart3, 
   Bell, 
-  Award
+  Award,
+  Mail
 } from "lucide-react";
 
 export default function Landing() {
   const navigate = useNavigate();
+  const [activeModal, setActiveModal] = useState<'privacy' | 'terms' | 'contact' | null>(null);
+
+  const renderModal = () => {
+    switch(activeModal) {
+      case 'privacy':
+        return (
+          <Dialog open={true} onOpenChange={() => setActiveModal(null)}>
+            <DialogContent>
+              <DialogHeader>
+                <DialogTitle>Privacy Policy</DialogTitle>
+                <DialogDescription>
+                  At SelfSync, we are committed to protecting your privacy. We collect only essential information to provide and improve our wellness services.
+                </DialogDescription>
+              </DialogHeader>
+              <div className="space-y-4">
+                <p>We collect:</p>
+                <ul className="list-disc pl-5">
+                  <li>User registration information</li>
+                  <li>Usage data to improve our service</li>
+                  <li>Anonymous analytics</li>
+                </ul>
+              </div>
+              <DialogFooter>
+                <Button onClick={() => setActiveModal(null)}>Close</Button>
+              </DialogFooter>
+            </DialogContent>
+          </Dialog>
+        );
+      case 'terms':
+        return (
+          <Dialog open={true} onOpenChange={() => setActiveModal(null)}>
+            <DialogContent>
+              <DialogHeader>
+                <DialogTitle>Terms of Service</DialogTitle>
+                <DialogDescription>
+                  By using SelfSync, you agree to our terms of service and commitment to user wellness.
+                </DialogDescription>
+              </DialogHeader>
+              <div className="space-y-4">
+                <p>Key Terms:</p>
+                <ul className="list-disc pl-5">
+                  <li>Users must be 13 years or older</li>
+                  <li>Personal data is confidential</li>
+                  <li>Service can be modified at any time</li>
+                </ul>
+              </div>
+              <DialogFooter>
+                <Button onClick={() => setActiveModal(null)}>Close</Button>
+              </DialogFooter>
+            </DialogContent>
+          </Dialog>
+        );
+      case 'contact':
+        return (
+          <Dialog open={true} onOpenChange={() => setActiveModal(null)}>
+            <DialogContent>
+              <DialogHeader>
+                <DialogTitle>Contact Us</DialogTitle>
+                <DialogDescription>
+                  We're here to help you on your wellness journey.
+                </DialogDescription>
+              </DialogHeader>
+              <div className="flex items-center gap-2">
+                <Mail className="h-5 w-5 text-primary" />
+                <a 
+                  href="mailto:bennett.selfsync@gmail.com" 
+                  className="text-primary hover:underline"
+                >
+                  bennett.selfsync@gmail.com
+                </a>
+              </div>
+              <DialogFooter>
+                <Button onClick={() => setActiveModal(null)}>Close</Button>
+              </DialogFooter>
+            </DialogContent>
+          </Dialog>
+        );
+      default:
+        return null;
+    }
+  };
 
   return (
     <Layout hideNav>
       <div className="flex flex-col min-h-screen">
-        {/* Navigation */}
         <header className="border-b border-border/40 bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60">
           <div className="container flex h-16 items-center justify-between">
             <Logo size="md" />
@@ -33,7 +114,6 @@ export default function Landing() {
           </div>
         </header>
 
-        {/* Hero Section */}
         <section className="flex-1 py-12 md:py-24 lg:py-32 xl:py-48 bg-gradient-to-b from-background to-muted/40">
           <div className="container px-4 md:px-6 flex flex-col items-center text-center space-y-8">
             <div className="space-y-4 max-w-3xl mx-auto">
@@ -85,7 +165,6 @@ export default function Landing() {
           </div>
         </section>
 
-        {/* Features Section */}
         <section className="py-20 bg-muted/30">
           <div className="container px-4 md:px-6">
             <div className="text-center mb-12">
@@ -133,7 +212,6 @@ export default function Landing() {
           </div>
         </section>
 
-        {/* CTA Section */}
         <section className="py-20 bg-primary/5">
           <div className="container px-4 md:px-6">
             <div className="flex flex-col items-center justify-center text-center max-w-3xl mx-auto space-y-8">
@@ -146,19 +224,37 @@ export default function Landing() {
           </div>
         </section>
 
-        {/* Footer */}
         <footer className="border-t py-8 bg-background">
           <div className="container px-4 md:px-6">
             <div className="flex flex-col md:flex-row items-center justify-between gap-4">
               <Logo className="mb-4 md:mb-0" />
               <div className="flex space-x-4">
-                <Button variant="ghost" size="sm">Privacy</Button>
-                <Button variant="ghost" size="sm">Terms</Button>
-                <Button variant="ghost" size="sm">Contact</Button>
+                <Button 
+                  variant="ghost" 
+                  size="sm" 
+                  onClick={() => setActiveModal('privacy')}
+                >
+                  Privacy
+                </Button>
+                <Button 
+                  variant="ghost" 
+                  size="sm" 
+                  onClick={() => setActiveModal('terms')}
+                >
+                  Terms
+                </Button>
+                <Button 
+                  variant="ghost" 
+                  size="sm" 
+                  onClick={() => setActiveModal('contact')}
+                >
+                  Contact
+                </Button>
               </div>
-              <p className="text-sm text-muted-foreground">© 2023 SelfSync. All rights reserved.</p>
+              <p className="text-sm text-muted-foreground">© 2025 SelfSync. All rights reserved.</p>
             </div>
           </div>
+          {renderModal()}
         </footer>
       </div>
     </Layout>
