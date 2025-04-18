@@ -26,8 +26,11 @@ import {
   Bell,
   MessageSquare,
   GamepadIcon,
+  Pencil,
+  Trash
 } from "lucide-react";
 import { Link } from "react-router-dom";
+import { ReminderDialog } from "@/components/dashboard/ReminderDialog";
 
 type Reminder = {
   id: string;
@@ -76,6 +79,10 @@ export default function Dashboard() {
     { id: "4", title: "Exercise", time: "5:30 PM", icon: <HeartIcon />, completed: false },
     { id: "5", title: "Sleep routine", time: "10:00 PM", icon: <MoonIcon />, completed: false },
   ], []);
+
+  const [reminders, setReminders] = useState(todayReminders);
+  const [editingReminder, setEditingReminder<typeof todayReminders[0] | null>(null);
+  const [isReminderDialogOpen, setIsReminderDialogOpen] = useState(false);
   
   const streaks = useMemo(() => [
     { activity: "Meditation", days: 12, icon: <BrainCircuitIcon className="h-5 w-5 text-purple-500" /> },
@@ -90,6 +97,52 @@ export default function Dashboard() {
     { id: 3, name: "Meditation Master", description: "Completed 10 meditation sessions", icon: <BrainCircuitIcon className="h-8 w-8 text-purple-500" /> },
     { id: 4, name: "Gratitude Guru", description: "Added to gratitude journal 5 days in a row", icon: <Heart className="h-8 w-8 text-rose-500" /> },
   ], []);
+
+  const handleToggleReminder = (id: string) => {
+    setReminders(prev => 
+      prev.map(reminder => 
+        reminder.id === id 
+          ? { ...reminder, completed: !reminder.completed }
+          : reminder
+      )
+    );
+  };
+
+  const handleEditReminder = (reminder: typeof todayReminders[0]) => {
+    setEditingReminder(reminder);
+    setIsReminderDialogOpen(true);
+  };
+
+  const handleDeleteReminder = (id: string) => {
+    setReminders(prev => prev.filter(reminder => reminder.id !== id));
+  };
+
+  const handleSaveReminder = (data: { title: string; time: string }) => {
+    if (editingReminder) {
+      setReminders(prev =>
+        prev.map(reminder =>
+          reminder.id === editingReminder.id
+            ? { ...reminder, title: data.title, time: data.time }
+            : reminder
+        )
+      );
+    } else {
+      const newReminder = {
+        id: Date.now().toString(),
+        title: data.title,
+        time: data.time,
+        icon: <Bell className="h-4 w-4" />,
+        completed: false,
+      };
+      setReminders(prev => [...prev, newReminder]);
+    }
+    setEditingReminder(null);
+  };
+
+  const handleAddNewReminder = () => {
+    setEditingReminder(null);
+    setIsReminderDialogOpen(true);
+  };
 
   const renderDashboardTab = () => (
     <TabsContent value="dashboard" className="space-y-6">
@@ -346,7 +399,7 @@ export default function Dashboard() {
         </CardHeader>
         <CardContent>
           <div className="space-y-4">
-            {todayReminders.map((reminder) => (
+            {reminders.map((reminder) => (
               <div
                 key={reminder.id}
                 className="flex items-center gap-4 rounded-lg border p-4"
@@ -366,11 +419,14 @@ export default function Dashboard() {
                   <input
                     type="checkbox"
                     checked={reminder.completed}
+                    onChange={() => handleToggleReminder(reminder.id)}
                     className="h-5 w-5 rounded-md border-gray-300 text-primary focus:ring-primary"
-                    readOnly
                   />
-                  <Button variant="ghost" size="icon">
-                    <Bell className="h-4 w-4" />
+                  <Button variant="ghost" size="icon" onClick={() => handleEditReminder(reminder)}>
+                    <Pencil className="h-4 w-4" />
+                  </Button>
+                  <Button variant="ghost" size="icon" onClick={() => handleDeleteReminder(reminder.id)}>
+                    <Trash className="h-4 w-4" />
                   </Button>
                 </div>
               </div>
@@ -378,10 +434,19 @@ export default function Dashboard() {
           </div>
           
           <div className="mt-6">
-            <Button className="w-full">Add New Reminder</Button>
+            <Button className="w-full" onClick={handleAddNewReminder}>
+              Add New Reminder
+            </Button>
           </div>
         </CardContent>
       </Card>
+
+      <ReminderDialog
+        open={isReminderDialogOpen}
+        onOpenChange={setIsReminderDialogOpen}
+        reminder={editingReminder || undefined}
+        onSave={handleSaveReminder}
+      />
     </TabsContent>
   );
 
