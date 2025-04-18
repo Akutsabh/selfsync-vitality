@@ -84,7 +84,7 @@ const AppRoutes = () => {
 const App = () => (
   <QueryClientProvider client={queryClient}>
     <ThemeProvider defaultTheme="light" storageKey="selfsync-theme">
-      <BrowserRouter>
+      <BrowserRouter basename="/">
         <AuthProvider>
           <TooltipProvider>
             <Toaster />
