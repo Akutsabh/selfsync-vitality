@@ -81,7 +81,7 @@ export default function Dashboard() {
   ], []);
 
   const [reminders, setReminders] = useState(todayReminders);
-  const [editingReminder, setEditingReminder<typeof todayReminders[0] | null>(null);
+  const [editingReminder, setEditingReminder] = useState<typeof todayReminders[0] | null>(null);
   const [isReminderDialogOpen, setIsReminderDialogOpen] = useState(false);
   
   const streaks = useMemo(() => [

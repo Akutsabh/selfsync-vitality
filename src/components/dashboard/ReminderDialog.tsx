@@ -1,5 +1,5 @@
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogFooter } from "@/components/ui/dialog";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -23,6 +23,25 @@ export function ReminderDialog({ open, onOpenChange, reminder, onSave }: Reminde
   const [title, setTitle] = useState(reminder?.title || "");
   const [hours, setHours] = useState(reminder ? parseInt(reminder.time.split(":")[0]) : 9);
   const [minutes, setMinutes] = useState(reminder ? parseInt(reminder.time.split(":")[1]) : 0);
+
+  // Reset form values when the dialog opens with a different reminder
+  useEffect(() => {
+    if (reminder) {
+      setTitle(reminder.title);
+      
+      // Parse time if it's in HH:MM format
+      const timeParts = reminder.time.split(":");
+      if (timeParts.length === 2) {
+        setHours(parseInt(timeParts[0]));
+        setMinutes(parseInt(timeParts[1]));
+      }
+    } else {
+      // Default values for a new reminder
+      setTitle("");
+      setHours(9);
+      setMinutes(0);
+    }
+  }, [reminder, open]);
 
   const handleSave = () => {
     onSave({
