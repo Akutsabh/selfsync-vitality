@@ -1,5 +1,6 @@
 import { useState, useEffect, useMemo } from "react";
 import { useSearchParams } from "react-router-dom";
+import { toast } from "sonner";
 import { Button } from "@/components/ui/button";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
@@ -31,6 +32,7 @@ import {
 } from "lucide-react";
 import { Link } from "react-router-dom";
 import { ReminderDialog } from "@/components/dashboard/ReminderDialog";
+import { requestNotificationPermission, sendNotification } from "@/utils/notificationUtils";
 
 type Reminder = {
   id: string;
@@ -97,6 +99,40 @@ export default function Dashboard() {
     { id: 3, name: "Meditation Master", description: "Completed 10 meditation sessions", icon: <BrainCircuitIcon className="h-8 w-8 text-purple-500" /> },
     { id: 4, name: "Gratitude Guru", description: "Added to gratitude journal 5 days in a row", icon: <Heart className="h-8 w-8 text-rose-500" /> },
   ], []);
+
+  useEffect(() => {
+    requestNotificationPermission();
+  }, []);
+
+  useEffect(() => {
+    const checkReminders = () => {
+      const now = new Date();
+      const currentHour = now.getHours();
+      const currentMinute = now.getMinutes();
+
+      reminders.forEach((reminder) => {
+        if (!reminder.completed) {
+          const [hours, minutes] = reminder.time.split(":").map(Number);
+          
+          if (hours === currentHour && minutes === currentMinute) {
+            sendNotification(reminder.title, {
+              body: `Time for your reminder: ${reminder.title}`,
+              icon: "/favicon.ico"
+            });
+            
+            if (!document.hidden) {
+              toast.info(`Time for ${reminder.title}`, {
+                description: `It's ${reminder.time}`,
+              });
+            }
+          }
+        }
+      });
+    };
+
+    const interval = setInterval(checkReminders, 60000);
+    return () => clearInterval(interval);
+  }, [reminders]);
 
   const handleToggleReminder = (id: string) => {
     setReminders(prev => 
