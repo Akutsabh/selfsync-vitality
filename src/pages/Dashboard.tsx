@@ -1,10 +1,9 @@
-
 import { useState, useEffect, useMemo } from "react";
 import { useSearchParams } from "react-router-dom";
 import { toast } from "sonner";
 import { Button } from "@/components/ui/button";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import { Card } from "@/components/ui/card";
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import Layout from "@/components/Layout";
 import { useAuth } from "@/contexts/AuthContext";
 import { ReminderDialog } from "@/components/dashboard/ReminderDialog";
@@ -161,6 +160,10 @@ export default function Dashboard() {
   const renderRemindersTab = () => (
     <TabsContent value="reminders" className="space-y-6">
       <Card className="border-none shadow-sm">
+        <CardHeader>
+          <CardTitle>Self-Care Reminders</CardTitle>
+          <CardDescription>Manage your daily wellness activities</CardDescription>
+        </CardHeader>
         <CardContent>
           <div className="space-y-4">
             {reminders.map((reminder) => (
@@ -214,18 +217,6 @@ export default function Dashboard() {
     </TabsContent>
   );
 
-  const renderDashboardTab = () => (
-    <TabsContent value="dashboard" className="space-y-6">
-      <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
-        <WellnessScoreCard wellnessScore={wellnessScore} />
-        <RemindersCard reminders={reminders} />
-        <StreaksCard streaks={streaks} />
-      </div>
-      <QuickActions />
-      <QuickLinks />
-    </TabsContent>
-  );
-
   return (
     <Layout>
       <div className="container py-6 md:py-8">
@@ -258,7 +249,17 @@ export default function Dashboard() {
             <TabsTrigger value="games">Games</TabsTrigger>
           </TabsList>
           
-          {activeTab === "dashboard" && renderDashboardTab()}
+          {activeTab === "dashboard" && (
+            <TabsContent value="dashboard" className="space-y-6">
+              <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
+                <WellnessScoreCard wellnessScore={wellnessScore} />
+                <RemindersCard reminders={reminders} />
+                <StreaksCard streaks={streaks} />
+              </div>
+              <QuickActions />
+              <QuickLinks />
+            </TabsContent>
+          )}
           {activeTab === "reminders" && renderRemindersTab()}
           {activeTab === "rewards" && <TabsContent value="rewards" className="space-y-6"><RewardsContent badges={badges} /></TabsContent>}
           {activeTab === "games" && <TabsContent value="games" className="space-y-6"><GamesContent /></TabsContent>}
