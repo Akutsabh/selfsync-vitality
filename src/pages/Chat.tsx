@@ -88,20 +88,18 @@ export default function Chat() {
   const generateResponse = (message: string): string => {
     const lowerMsg = message.toLowerCase();
     
-    if (lowerMsg.includes('headache') || lowerMsg.includes('migraine')) {
-      return "For headaches, try: 1) Staying hydrated 2) Taking a break from screens 3) Getting some rest in a dark, quiet room 4) Using cold or hot compresses 5) Practicing relaxation techniques. If headaches are frequent or severe, consult a healthcare provider.";
-    } else if (lowerMsg.includes('nutrition') || lowerMsg.includes('healthy eating')) {
-      return "A balanced diet should include: 1) Plenty of fruits and vegetables 2) Whole grains 3) Lean proteins 4) Healthy fats 5) Limited processed foods and added sugars. Aim for variety and portion control. Consider consulting a registered dietitian for personalized advice.";
-    } else if (lowerMsg.includes('exercise') || lowerMsg.includes('workout')) {
-      return "For a well-rounded fitness routine: 1) Get 150 minutes of moderate aerobic activity weekly 2) Include strength training 2-3 times per week 3) Add flexibility and balance exercises 4) Start slowly and progress gradually 5) Listen to your body and rest when needed.";
-    } else if (lowerMsg.includes('sleep') || lowerMsg.includes('insomnia')) {
-      return "For better sleep: 1) Maintain a consistent sleep schedule 2) Create a relaxing bedtime routine 3) Keep your bedroom cool, dark, and quiet 4) Limit screen time before bed 5) Avoid caffeine and heavy meals late in the day. If sleep problems persist, consult a healthcare provider.";
+    if (lowerMsg.includes('sleep') || lowerMsg.includes('insomnia')) {
+      return "For better sleep quality, try to maintain a consistent sleep schedule, avoid screens 1 hour before bed, keep your bedroom cool and dark, and consider relaxation techniques like deep breathing or meditation. Also, limit caffeine and alcohol, especially in the evening.";
     } else if (lowerMsg.includes('stress') || lowerMsg.includes('anxiety')) {
-      return "To manage stress: 1) Practice deep breathing or meditation 2) Exercise regularly 3) Maintain a healthy sleep schedule 4) Talk to someone you trust 5) Consider professional help if needed. Remember, it's okay to seek support for mental health.";
-    } else if (lowerMsg.includes('vitamin') || lowerMsg.includes('supplement')) {
-      return "Regarding vitamins and supplements: 1) Focus on getting nutrients from whole foods first 2) Consult a healthcare provider before starting supplements 3) Common beneficial supplements include Vitamin D, B12, and Omega-3s 4) Be aware that supplements aren't regulated like medications 5) More isn't always better.";
-    } else if (lowerMsg.includes('weight') || lowerMsg.includes('diet')) {
-      return "For healthy weight management: 1) Focus on sustainable lifestyle changes 2) Eat a balanced diet with plenty of vegetables 3) Stay physically active 4) Get adequate sleep 5) Manage stress levels. Avoid fad diets and consult healthcare providers for personalized advice.";
+      return "To relieve stress quickly, try the 4-7-8 breathing technique: inhale for 4 seconds, hold for 7, and exhale for 8. Other effective methods include a short walk in nature, progressive muscle relaxation, or a quick mindfulness meditation. Regular exercise and adequate sleep are also important for long-term stress management.";
+    } else if (lowerMsg.includes('water') || lowerMsg.includes('hydration')) {
+      return "The standard recommendation is about 8 cups (64 ounces) of water daily, but your needs may vary based on activity level, climate, and overall health. A good rule of thumb is to drink when thirsty and aim for pale yellow urine. Remember that fruits, vegetables, and other beverages also contribute to your fluid intake.";
+    } else if (lowerMsg.includes('meal') || lowerMsg.includes('diet') || lowerMsg.includes('food')) {
+      return "Some easy, healthy meal ideas include: overnight oats with fruit for breakfast, grain bowls with vegetables and lean protein for lunch, and sheet pan dinners with protein and roasted vegetables for dinner. Meal prepping and keeping nutritious staples on hand can make healthy eating more convenient.";
+    } else if (lowerMsg.includes('meditation') || lowerMsg.includes('mindfulness')) {
+      return "To start meditating, begin with just 5 minutes daily. Find a quiet space, sit comfortably, and focus on your breath. When your mind wanders (which is normal), gently return focus to your breathing. Consider using a guided meditation app for structure. Consistency is more important than duration, so try to practice daily.";
+    } else if (lowerMsg.includes('exercise') || lowerMsg.includes('workout')) {
+      return "A good beginner exercise plan includes 150 minutes of moderate activity weekly (like brisk walking), plus strength training twice weekly. Start with 10-minute sessions if needed and gradually increase. Incorporate activities you enjoy, whether it's dancing, swimming, or cycling. Remember to warm up, cool down, and give your body recovery time.";
     } else if (lowerMsg.includes('hello') || lowerMsg.includes('hi') || lowerMsg.includes('hey')) {
       return `Hello! I'm your AI wellness assistant. I can help with questions about nutrition, exercise, sleep, stress management, and other health topics. How can I assist you today?`;
     } else {

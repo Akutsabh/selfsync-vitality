@@ -1,13 +1,7 @@
 
 import { CardContent, CardDescription, CardHeader, CardTitle, Card } from "@/components/ui/card";
 import { Progress } from "@/components/ui/progress";
-import { Target, Info } from "lucide-react";
-import {
-  Tooltip,
-  TooltipContent,
-  TooltipProvider,
-  TooltipTrigger,
-} from "@/components/ui/tooltip";
+import { Target } from "lucide-react";
 
 interface WellnessScoreCardProps {
   wellnessScore: number;
@@ -17,31 +11,10 @@ export function WellnessScoreCard({ wellnessScore }: WellnessScoreCardProps) {
   return (
     <Card className="border-none shadow-sm">
       <CardHeader className="pb-2">
-        <div className="flex items-center justify-between">
-          <CardTitle className="flex items-center gap-2">
-            <Target className="h-5 w-5 text-primary" />
-            Wellness Score
-          </CardTitle>
-          <TooltipProvider>
-            <Tooltip>
-              <TooltipTrigger asChild>
-                <button className="rounded-full p-1 hover:bg-muted">
-                  <Info className="h-4 w-4 text-muted-foreground" />
-                </button>
-              </TooltipTrigger>
-              <TooltipContent className="max-w-[300px]">
-                <p>Your Wellness Score (0-100) is calculated based on four key factors:</p>
-                <ul className="mt-2 list-disc pl-4 space-y-1">
-                  <li>Physical Activity & Exercise (25%)</li>
-                  <li>Mental Wellness & Stress Levels (25%)</li>
-                  <li>Sleep Quality & Duration (25%)</li>
-                  <li>Nutrition & Hydration (25%)</li>
-                </ul>
-                <p className="mt-2">Track these areas regularly to improve your score!</p>
-              </TooltipContent>
-            </Tooltip>
-          </TooltipProvider>
-        </div>
+        <CardTitle className="flex items-center gap-2">
+          <Target className="h-5 w-5 text-primary" />
+          Wellness Score
+        </CardTitle>
         <CardDescription>Your overall wellness metrics</CardDescription>
       </CardHeader>
       <CardContent>
